@@ -43,6 +43,9 @@ const ValidationTextFieldPhone = styled(TextField)(({ inputValue }) => ({
       borderColor: inputValue === 11 ? "green" : "yellow",
       borderWidth: 2,
     },
+    "& error": {
+      borderColor: "red",
+    },
   },
 }));
 
@@ -259,7 +262,8 @@ function ContactForm(props) {
   const [values, setValues] = React.useState({
     phoneNumber: "",
   });
-  const [isValid, setIsValid] = useState(true);
+  const [isEmailValid, setIsEmailValid] = useState(true);
+  const [isPhoneValid, setIsPhoneValid] = useState(true);
 
   const handleChange = (event) => {
     setValues({
@@ -268,13 +272,16 @@ function ContactForm(props) {
     });
   };
 
-  const handleBlur = (event) => {
+  const handleEmail = (event) => {
     const { name, value } = event.target;
-
-    if (name === "email") {
-      setIsValid(value.contain === "@");
-    } else if (name === "zipCode") {
-      setIsValid(value.length === 4);
+    {
+      name === "email" ? setIsEmailValid(value.contain === "@") : "";
+    }
+  };
+  const handlePhone = (event) => {
+    const { name, value } = event.target;
+    {
+      name === "phoneNumber" ? setIsPhoneValid(value.length === 11) : "";
     }
   };
 
@@ -338,17 +345,26 @@ function ContactForm(props) {
             InputProps={{ inputComponent: TextMaskCustom }}
             fullWidth
             label="Phone number"
+            // error={!isValid}
+            onBlur={handlePhone}
             required
             variant="outlined"
             value={values.phoneNumber}
             inputValue={inputValue}
             name="phoneNumber"
           />
+          {!isPhoneValid ? (
+            <small className="font-sans">
+              Please enter a valid phone number e.g: <span className="font-sans font-thin">22 22 22 22</span>
+            </small>
+          ) : (
+            ""
+          )}
           <ValidationTextField
             inputProps={{ inputMode: "email" }}
             type="email"
-            error={!isValid}
-            onBlur={handleBlur}
+            // error={!isValid}
+            onBlur={handleEmail}
             fullWidth
             className="mt-4"
             label="Email"
@@ -358,7 +374,7 @@ function ContactForm(props) {
             id="validation-outlined-input"
             name="email"
           />
-          {!isValid ? <small>This field requires at least an @ sign</small> : ""}
+          {!isEmailValid ? <small className="font-sans">Email must contain at least an @ sign</small> : ""}
           <ValidationTextField
             inputProps={{ inputMode: "text" }}
             fullWidth
