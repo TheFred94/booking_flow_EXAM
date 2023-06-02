@@ -14,8 +14,9 @@ import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import PriceDrawer from "@/components/PriceDrawer";
 import { useRouter } from "next/router";
 import CountdownTimer from "./CountdownTimer";
+import { MaterialSymbol } from "material-symbols";
 
-const ValidationTextFieldPhone = styled(TextField)(({ inputValue }) => ({
+const ValidationTextFieldPhone = styled(TextField)(({ inputValue, error }) => ({
   "& label.Mui-focused": {
     color: "#f9f9f9", //label focused
   },
@@ -27,7 +28,7 @@ const ValidationTextFieldPhone = styled(TextField)(({ inputValue }) => ({
   },
   "& .MuiOutlinedInput-root": {
     "& fieldset": {
-      borderColor: "yellow",
+      borderColor: "#F9F01F",
     },
     "&:hover fieldset": {
       borderColor: "#B2BAC2",
@@ -36,15 +37,11 @@ const ValidationTextFieldPhone = styled(TextField)(({ inputValue }) => ({
       color: "#f9f9f9", // Set the text color
     },
     "&.Mui-focused fieldset": {
-      borderColor: "yellow",
+      borderColor: "#F9F01F",
     },
     "& input:valid + fieldset": {
-      borderColor: "green",
-      borderColor: inputValue === 11 ? "green" : "yellow",
-      borderWidth: 2,
-    },
-    "& error": {
-      borderColor: "red",
+      borderColor: inputValue === 11 ? "#00b88b" : "",
+      borderWidth: 3,
     },
   },
 }));
@@ -61,7 +58,7 @@ const ValidationTextFieldZip = styled(TextField)(({ inputValueZip }) => ({
   },
   "& .MuiOutlinedInput-root": {
     "& fieldset": {
-      borderColor: "yellow",
+      borderColor: "#F9F01F",
     },
     "& input": {
       color: "#f9f9f9", // Set the text color
@@ -73,9 +70,10 @@ const ValidationTextFieldZip = styled(TextField)(({ inputValueZip }) => ({
       borderColor: "yellow",
     },
     "& input:valid + fieldset": {
-      borderColor: "green",
-      borderColor: inputValueZip === 4 ? "green" : "yellow",
-      borderWidth: 2,
+      borderColor: "#00b88b",
+      borderColor: inputValueZip === 4 ? "#00b88b" : "#F9F01F",
+
+      borderWidth: 3,
     },
   },
 }));
@@ -92,7 +90,7 @@ const ValidationTextField = styled(TextField)({
   },
   "& .MuiOutlinedInput-root": {
     "& fieldset": {
-      borderColor: "yellow",
+      borderColor: "#F9F01F",
     },
     "& input": {
       color: "#f9f9f9", // Set the text color
@@ -101,11 +99,11 @@ const ValidationTextField = styled(TextField)({
       borderColor: "#B2BAC2",
     },
     "&.Mui-focused fieldset": {
-      borderColor: "yellow",
+      borderColor: "#F9F01F",
     },
     "& input:valid + fieldset": {
-      borderColor: "green",
-      borderWidth: 2,
+      borderColor: "#00b88b",
+      borderWidth: 3,
     },
   },
 });
@@ -201,8 +199,9 @@ function Contact(props) {
 
   return (
     <>
+      <h2 className="mt-48 ">Enter your information</h2>
       <CountdownTimer />
-      <div className="mx-1 mt-32 max-w-full rounded-sm bg-gradient-to-b from-color-opacity-20 to-color-opacity-10 px-8 pt-8 md:mx-auto md:max-w-2xl">
+      <div className="mx-1 mt-10 max-w-full rounded-sm bg-gradient-to-b from-color-opacity-20 to-color-opacity-10 px-8 pt-8 md:mx-auto md:max-w-2xl">
         {[...Array(bookingDetails.ticketAmount)].map((_, index) => (
           <ContactForm
             bookingDetails={bookingDetails}
@@ -274,14 +273,15 @@ function ContactForm(props) {
 
   const handleEmail = (event) => {
     const { name, value } = event.target;
-    {
-      name === "email" ? setIsEmailValid(value.contain === "@") : "";
+    if (name === "email") {
+      setIsEmailValid(value.includes("@"));
     }
   };
+
   const handlePhone = (event) => {
     const { name, value } = event.target;
-    {
-      name === "phoneNumber" ? setIsPhoneValid(value.length === 11) : "";
+    if (name === "phoneNumber") {
+      setIsPhoneValid(value.length === 11);
     }
   };
 
@@ -337,15 +337,18 @@ function ContactForm(props) {
             id="validation-outlined-input"
             name="lastName"
           />
+
           <ValidationTextFieldPhone
-            inputProps={{ inputMode: "tel" }}
-            className="mt-4"
+            inputProps={{
+              inputMode: "tel",
+            }}
+            className={`mt-4 ${!isPhoneValid ? "shake" : ""}`}
             onChange={handleChange}
             id="formatted-text-mask-input"
-            InputProps={{ inputComponent: TextMaskCustom }}
+            InputProps={{ inputComponent: TextMaskCustom, endAdornment: !isPhoneValid ? <span class="material-symbols-outlined wrong">do_not_disturb_on</span> : "" }}
             fullWidth
             label="Phone number"
-            // error={!isValid}
+            error={!isPhoneValid}
             onBlur={handlePhone}
             required
             variant="outlined"
@@ -353,20 +356,18 @@ function ContactForm(props) {
             inputValue={inputValue}
             name="phoneNumber"
           />
-          {!isPhoneValid ? (
+          {!isPhoneValid && (
             <small className="font-sans">
               Please enter a valid phone number e.g: <span className="font-sans font-thin">22 22 22 22</span>
             </small>
-          ) : (
-            ""
           )}
           <ValidationTextField
-            inputProps={{ inputMode: "email" }}
+            InputProps={{ inputMode: "email", endAdornment: !isEmailValid ? <span class="material-symbols-outlined wrong">do_not_disturb_on</span> : "" }}
             type="email"
-            // error={!isValid}
+            error={!isEmailValid}
             onBlur={handleEmail}
             fullWidth
-            className="mt-4"
+            className={`mt-4 ${!isEmailValid ? "shake" : ""}`}
             label="Email"
             required
             variant="outlined"
@@ -374,7 +375,7 @@ function ContactForm(props) {
             id="validation-outlined-input"
             name="email"
           />
-          {!isEmailValid ? <small className="font-sans">Email must contain at least an @ sign</small> : ""}
+          {!isEmailValid && <small className="font-sans">Email must contain at least an @ sign</small>}
           <ValidationTextField
             inputProps={{ inputMode: "text" }}
             fullWidth

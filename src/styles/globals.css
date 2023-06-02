@@ -80,3 +80,28 @@ span {
 .css-14s5rfu-MuiFormLabel-root-MuiInputLabel-root {
   color: #f9f9f9;
 }
+
+.css-1jy569b-MuiFormLabel-root-MuiInputLabel-root.Mui-error {
+  color: #f9f9f9;
+}
+
+.check {
+  color: #00b88b;
+}
+
+.wrong {
+  color: #eb8686;
+}
+
+.shake {
+  animation: shake 0.125s 2 backwards;
+}
+
+@keyframes shake {
+  25% {
+    transform: translateX(-6px);
+  }
+  75% {
+    transform: translateX(6px);
+  }
+}
