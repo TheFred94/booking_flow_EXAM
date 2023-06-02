@@ -12,6 +12,9 @@ import { Button } from "@mui/material";
 import Router, { useRouter } from "next/router";
 import CountdownTimer from "./CountdownTimer";
 import Drawer from "@/components/PriceDrawer";
+import Stepper from "@mui/material/Stepper";
+import Step from "@mui/material/Step";
+import StepLabel from "@mui/material/StepLabel";
 
 export default function TentSelection() {
   const router = useRouter();
@@ -36,9 +39,7 @@ export default function TentSelection() {
   }, [bookingDetails, totalTentCount]);
 
   function updateTotalTentCount() {
-    setTotalTentCount(
-      twoPersonTentNum + threePersonTentNum + twoPersonTentPrivatNum + threePersonTentPrivatNum
-    );
+    setTotalTentCount(twoPersonTentNum + threePersonTentNum + twoPersonTentPrivatNum + threePersonTentPrivatNum);
   }
 
   function updateSpotsLeft() {
@@ -51,19 +52,15 @@ export default function TentSelection() {
     } else {
       if (type === "privat") {
         if (size === 2) {
-          action
-            ? setTwoPersonTentPrivatNum(old => old + 1)
-            : setTwoPersonTentPrivatNum(old => old - 1);
+          action ? setTwoPersonTentPrivatNum((old) => old + 1) : setTwoPersonTentPrivatNum((old) => old - 1);
         } else if (size === 3) {
-          action
-            ? setThreePersonTentPrivatNum(old => old + 1)
-            : setThreePersonTentPrivatNum(old => old - 1);
+          action ? setThreePersonTentPrivatNum((old) => old + 1) : setThreePersonTentPrivatNum((old) => old - 1);
         }
       } else if (type === "foofest") {
         if (size === 2) {
-          action ? setTwoPersonTentNum(old => old + 1) : setTwoPersonTentNum(old => old - 1);
+          action ? setTwoPersonTentNum((old) => old + 1) : setTwoPersonTentNum((old) => old - 1);
         } else if (size === 3) {
-          action ? setThreePersonTentNum(old => old + 1) : setThreePersonTentNum(old => old - 1);
+          action ? setThreePersonTentNum((old) => old + 1) : setThreePersonTentNum((old) => old - 1);
         }
       }
     }
@@ -75,7 +72,7 @@ export default function TentSelection() {
 
   /*This function updates bookingDetails, by setting state to the new values of "ticketAmount" and oneTentForEach*/
   function updateBookingDetails() {
-    setBookingDetails(prev => ({
+    setBookingDetails((prev) => ({
       ...prev,
 
       foofestTents: { twoPersonTent: twoPersonTentNum, threePersonTent: threePersonTentNum },
@@ -85,6 +82,8 @@ export default function TentSelection() {
       },
     }));
   }
+
+  const steps = ["Amount", "Type", "Setup", "Information", "Payment"];
 
   function nextPage() {
     router.push(bookingDetails.oneTentForEach ? `/contact_information` : `/contact_information`);
@@ -136,8 +135,7 @@ export default function TentSelection() {
                 mt: 2,
               }}
             >
-              You have ran out of tent spots, if you want to fit more peope then buy or bring bigger
-              tents
+              You have ran out of tent spots, if you want to fit more peope then buy or bring bigger tents
             </Typography>
             <div className="mt-10 flex justify-center">
               <Button
@@ -154,15 +152,19 @@ export default function TentSelection() {
       <section>
         <h2 className="mt-48 text-center">Tent Setup</h2>
 
+        <Stepper
+          activeStep={2}
+          alternativeLabel
+        >
+          {steps.map((label) => (
+            <Step key={label}>
+              <StepLabel>{label}</StepLabel>
+            </Step>
+          ))}
+        </Stepper>
         <article className="mt-5 grid place-content-center">
           <p>
-            You have{" "}
-            <span
-              className={spotsLeft <= 0 ? "font-bold text-color-red" : "font-bold text-color-white"}
-            >
-              {spotsLeft}
-            </span>{" "}
-            spots left to use
+            You have <span className={spotsLeft <= 0 ? "font-bold text-color-red" : "font-bold text-color-white"}>{spotsLeft}</span> spots left to use
           </p>
           <p></p>
         </article>
@@ -173,9 +175,7 @@ export default function TentSelection() {
           ) : (
             <article className="mx-1 mb-12 mt-12 max-w-full rounded-sm bg-gradient-to-b from-color-opacity-20 to-color-opacity-10 px-8 pt-8 md:mx-auto md:max-w-2xl ">
               <h3 className="text-center">Bring your own tent</h3>
-              <p className="mt-3 grid place-content-center opacity-75">
-                How many tents do you bring yourself?
-              </p>
+              <p className="mt-3 grid place-content-center opacity-75">How many tents do you bring yourself?</p>
               <div className="mt-6 flex flex-col  ">
                 <TentCounter
                   size={2}
@@ -196,9 +196,7 @@ export default function TentSelection() {
           <article className="mx-1 mt-8 max-w-full rounded-sm bg-gradient-to-b from-color-opacity-20 to-color-opacity-10 px-8 pt-8 md:mx-auto md:max-w-2xl">
             <h3 className="text-center">Buy tents from FooFest</h3>
             {/* <h3 className="mt-4 text-center text-base text-color-white">We'll set up your tents for you, so can enjoy the full festival experience without any hassle.</h3> */}
-            <p className="mt-3 grid place-content-center opacity-75">
-              How many tents do you want to buy?
-            </p>
+            <p className="mt-3 grid place-content-center opacity-75">How many tents do you want to buy?</p>
             <div className="mt-6 flex flex-col  ">
               <TentCounter
                 size={2}
@@ -222,8 +220,7 @@ export default function TentSelection() {
             className=" mb-10 h-10 gap-5 place-self-center rounded-none border-2 border-solid border-color-yellow px-6 font-sans font-semibold text-color-yellow hover:bg-color-yellow hover:text-color-black "
             onClick={nextPage}
           >
-            <span className="pt-1">Next step</span>{" "}
-            <span className="material-symbols-outlined">arrow_forward</span>
+            <span className="pt-1">Next step</span> <span className="material-symbols-outlined">arrow_forward</span>
           </Button>
         </div>
 

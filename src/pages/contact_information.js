@@ -15,6 +15,9 @@ import PriceDrawer from "@/components/PriceDrawer";
 import { useRouter } from "next/router";
 import CountdownTimer from "./CountdownTimer";
 import { MaterialSymbol } from "material-symbols";
+import Stepper from "@mui/material/Stepper";
+import Step from "@mui/material/Step";
+import StepLabel from "@mui/material/StepLabel";
 
 const ValidationTextFieldPhone = styled(TextField)(({ isValid }) => ({
   "& label.Mui-focused": {
@@ -73,7 +76,7 @@ const ValidationTextFieldZip = styled(TextField)(({ inputValueZip, isValid }) =>
     },
     "& input:valid + fieldset": {
       borderColor: "#00b88b",
-      borderColor: inputValueZip === 4 ? "#00b88b" : "#F9F01F",
+      borderColor: isValid === 4 ? "#00b88b" : "#F9F01F",
     },
   },
 }));
@@ -103,7 +106,7 @@ const ValidationTextField = styled(TextField)(({ isValid }) => ({
       borderColor: "#F9F01F",
     },
     "& input:valid + fieldset": {
-      borderColor: "#00b88b",
+      borderColor: isValid === true ? "#00b88b" : "#F9F01F",
       borderWidth: 3,
     },
   },
@@ -198,10 +201,23 @@ function Contact(props) {
     router.push("/payment");
   }
 
+  const steps = ["Amount", "Type", "Setup", "Information", "Payment"];
+
   return (
     <>
       <h2 className="mt-48 ">Enter your information</h2>
       <CountdownTimer />
+
+      <Stepper
+        activeStep={3}
+        alternativeLabel
+      >
+        {steps.map((label) => (
+          <Step key={label}>
+            <StepLabel>{label}</StepLabel>
+          </Step>
+        ))}
+      </Stepper>
       <div className="mx-1 mt-10 max-w-full rounded-sm bg-gradient-to-b from-color-opacity-20 to-color-opacity-10 px-8 pt-8 md:mx-auto md:max-w-2xl">
         {[...Array(bookingDetails.ticketAmount)].map((_, index) => (
           <ContactForm
@@ -262,14 +278,42 @@ function ContactForm(props) {
   const [values, setValues] = React.useState({
     phoneNumber: "",
   });
+  const [isFirstNameValid, setIsFirstNameValid] = useState(null);
+  const [isLastNameValid, setIsLastNameValid] = useState(null);
   const [isEmailValid, setIsEmailValid] = useState(null);
   const [isPhoneValid, setIsPhoneValid] = useState(null);
+  const [isZipCodeValid, setIsZipCodeValid] = useState(null);
 
   const handleChange = (event) => {
     setValues({
       ...values,
       [event.target.name]: event.target.value,
     });
+  };
+
+  const validateInput = (name, value) => {
+    let hasNumbers = false;
+    for (let i = 0; i < value.length; i++) {
+      if (!isNaN(parseInt(value[i]))) {
+        hasNumbers = true;
+        break;
+      }
+    }
+    return !hasNumbers;
+  };
+
+  const handleFirstName = (event) => {
+    const { name, value } = event.target;
+    if (name === "firstName") {
+      setIsFirstNameValid(validateInput(name, value));
+    }
+  };
+
+  const handleLastName = (event) => {
+    const { name, value } = event.target;
+    if (name === "lastName") {
+      setIsLastNameValid(validateInput(name, value));
+    }
   };
 
   const handleEmail = (event) => {
@@ -283,6 +327,13 @@ function ContactForm(props) {
     const { name, value } = event.target;
     if (name === "phoneNumber") {
       setIsPhoneValid(value.length === 11);
+    }
+    console.log(isPhoneValid);
+  };
+  const handleZipCode = (event) => {
+    const { name, value } = event.target;
+    if (name === "zipCode") {
+      setIsZipCodeValid(value.length === 4);
     }
     console.log(isPhoneValid);
   };
@@ -316,16 +367,17 @@ function ContactForm(props) {
         </AccordionSummary>
         <AccordionDetails>
           <ValidationTextField
-            className="text-color-white"
+            className={` ${isFirstNameValid === false && "shake"}`}
             InputProps={{
               inputMode: "text",
               endAdornment: (
                 <>
-                  {isPhoneValid === true && <span class="material-symbols-outlined check">check_circle</span>}
-                  {isPhoneValid === false && <span class="material-symbols-outlined wrong">error</span>}
+                  {isFirstNameValid === true && <span class="material-symbols-outlined check">check_circle</span>}
+                  {isFirstNameValid === false && <span class="material-symbols-outlined wrong">error</span>}
                 </>
               ),
             }}
+            onBlur={handleFirstName}
             fullWidth
             type="text"
             label="First name"
@@ -334,19 +386,22 @@ function ContactForm(props) {
             defaultValue=""
             id="validation-outlined-input"
             name="firstName"
+            isValid={isFirstNameValid}
           />
+          {isFirstNameValid === false && <small className="font-sans">Firstnames can't contain numbers!</small>}
           <ValidationTextField
             InputProps={{
               inputMode: "text",
               endAdornment: (
                 <>
-                  {isPhoneValid === true && <span class="material-symbols-outlined check">check_circle</span>}
-                  {isPhoneValid === false && <span class="material-symbols-outlined wrong">error</span>}
+                  {isLastNameValid === true && <span class="material-symbols-outlined check">check_circle</span>}
+                  {isLastNameValid === false && <span class="material-symbols-outlined wrong">error</span>}
                 </>
               ),
             }}
+            onBlur={handleLastName}
             fullWidth
-            className="mt-4"
+            className={`mt-4 ${isLastNameValid === false && "shake"}`}
             type="text"
             label="Last name"
             required
@@ -354,7 +409,9 @@ function ContactForm(props) {
             defaultValue=""
             id="validation-outlined-input"
             name="lastName"
+            isValid={isLastNameValid}
           />
+          {isLastNameValid === false && <small className="font-sans">Lastnames can't contain numbers!</small>}
           <ValidationTextFieldPhone
             className={`mt-4 ${isPhoneValid === false && "shake"}`}
             onChange={handleChange}
@@ -431,10 +488,19 @@ function ContactForm(props) {
             name="streetAdress"
           />
           <ValidationTextFieldZip
-            InputProps={{ inputMode: "decimal" }}
+            InputProps={{
+              inputMode: "decimal",
+              endAdornment: (
+                <>
+                  {isZipCodeValid === true && <span class="material-symbols-outlined check">check_circle</span>}
+                  {isZipCodeValid === false && <span class="material-symbols-outlined wrong">error</span>}
+                </>
+              ),
+            }}
+            onBlur={handleZipCode}
             type="number"
             fullWidth
-            className="mt-4"
+            className={`mt-4 ${isZipCodeValid === false && "shake"}`}
             label="Zip code"
             required
             variant="outlined"
@@ -444,7 +510,9 @@ function ContactForm(props) {
             onChange={handleChangeZip}
             inputValueZip={inputValueZip}
             name="zipCode"
+            isValid={isZipCodeValid}
           />
+          {isZipCodeValid === false && <small className="font-sans">Please enter a valid zipcode e.g: 2000</small>}
         </AccordionDetails>
         <div className="mt-10 flex justify-center">
           <Button

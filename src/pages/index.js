@@ -7,7 +7,10 @@ import { useRouter } from "next/router";
 import "material-symbols";
 import Drawer from "@/components/PriceDrawer";
 import config from "../../config";
-import { TicketAmountPicker } from "@/components/TicketAmountPicker";
+
+import Stepper from "@mui/material/Stepper";
+import Step from "@mui/material/Step";
+import StepLabel from "@mui/material/StepLabel";
 
 export default function AreaAndAmount(props) {
   // States
@@ -33,17 +36,20 @@ export default function AreaAndAmount(props) {
 
     router.push(`/ticket_type_and_add_on`);
   }
+
+  const steps = ["Amount", "Type", "Setup", "Information", "Payment"];
+
   async function startBookingTimer() {
     const updatedCountdownTime = countdownTime + new Date().getTime() + 300000;
     await setCountdownTime(updatedCountdownTime);
-    setBookingDetails(prev => ({
+    setBookingDetails((prev) => ({
       ...prev,
       buyTimeout: updatedCountdownTime,
     }));
   }
 
   function updateBookingDetails(reservation_id) {
-    setBookingDetails(prev => ({
+    setBookingDetails((prev) => ({
       ...prev,
       reservation_id,
     }));
@@ -53,9 +59,18 @@ export default function AreaAndAmount(props) {
     <main>
       <h1 className="mx-4 mt-10 text-center"> Purchase ticket</h1>
       <p className="mx-auto my-10 max-w-2xl">
-        With the mesmerizing <strong>Northern Lights</strong> as your backdrop, get ready to lose
-        yourself to the beats of the loudest music that's sure to get your heart racing.
+        With the mesmerizing <strong>Northern Lights</strong> as your backdrop, get ready to lose yourself to the beats of the loudest music that's sure to get your heart racing.
       </p>
+      <Stepper
+        activeStep={0}
+        alternativeLabel
+      >
+        {steps.map((label) => (
+          <Step key={label}>
+            <StepLabel>{label}</StepLabel>
+          </Step>
+        ))}
+      </Stepper>
       <div className="mx-auto max-w-3xl">
         {/* component, that lets user choose amount of tickets */}
         <ChooseAmount />
@@ -84,16 +99,14 @@ export default function AreaAndAmount(props) {
             className=" mb-10 h-10 gap-5 place-self-center rounded-none border-2 border-solid border-color-gray bg-color-gray px-6 font-sans font-semibold text-color-black hover:bg-color-yellow hover:text-color-black "
             onClick={reserveTickets}
           >
-            <span className="pt-1">Next step</span>{" "}
-            <span className="material-symbols-outlined">arrow_forward</span>
+            <span className="pt-1">Next step</span> <span className="material-symbols-outlined">arrow_forward</span>
           </Button>
         ) : (
           <Button
             className=" mb-10 h-10 gap-5 place-self-center rounded-none border-2 border-solid border-color-yellow px-6 font-sans font-semibold text-color-yellow hover:bg-color-yellow hover:text-color-black "
             onClick={reserveTickets}
           >
-            <span className="pt-1">Next step</span>{" "}
-            <span className="material-symbols-outlined">arrow_forward</span>
+            <span className="pt-1">Next step</span> <span className="material-symbols-outlined">arrow_forward</span>
           </Button>
         )}
       </div>

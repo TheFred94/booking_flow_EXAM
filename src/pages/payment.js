@@ -11,9 +11,11 @@ import Backdrop from "@mui/material/Backdrop";
 import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
 import Fade from "@mui/material/Fade";
-
 import Typography from "@mui/material/Typography";
 import CountdownTimer from "./CountdownTimer";
+import Stepper from "@mui/material/Stepper";
+import Step from "@mui/material/Step";
+import StepLabel from "@mui/material/StepLabel";
 
 export default function payment(props) {
   const [bookingDetails, setBookingDetails] = useContext(BookingInformation);
@@ -114,6 +116,8 @@ export default function payment(props) {
       .then(router.push(`/thank_you`));
   }
 
+  const steps = ["Amount", "Type", "Setup", "Information", "Payment"];
+
   return (
     <>
       <CountdownTimer />
@@ -159,8 +163,17 @@ export default function payment(props) {
             </Box>
           </Fade>
         </Modal>
-        <h2 className="text-center">Payment</h2>
-
+        <h2 className="mt-28 text-center">Payment</h2>
+        <Stepper
+          activeStep={5}
+          alternativeLabel
+        >
+          {steps.map((label) => (
+            <Step key={label}>
+              <StepLabel>{label}</StepLabel>
+            </Step>
+          ))}
+        </Stepper>
         <div className="mx-1 mt-8 max-w-full rounded-sm bg-gradient-to-b from-color-opacity-20 to-color-opacity-10 px-8 pt-8 md:mx-auto md:max-w-2xl">
           <PaymentForm
             bookingDetails={bookingDetails}
