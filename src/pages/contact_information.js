@@ -259,12 +259,23 @@ function ContactForm(props) {
   const [values, setValues] = React.useState({
     phoneNumber: "",
   });
+  const [isValid, setIsValid] = useState(true);
 
   const handleChange = (event) => {
     setValues({
       ...values,
       [event.target.name]: event.target.value,
     });
+  };
+
+  const handleBlur = (event) => {
+    const { name, value } = event.target;
+
+    if (name === "email") {
+      setIsValid(value.contain === "@");
+    } else if (name === "zipCode") {
+      setIsValid(value.length === 4);
+    }
   };
 
   const handleChangeZip = (event) => {
@@ -336,6 +347,8 @@ function ContactForm(props) {
           <ValidationTextField
             inputProps={{ inputMode: "email" }}
             type="email"
+            error={!isValid}
+            onBlur={handleBlur}
             fullWidth
             className="mt-4"
             label="Email"
@@ -345,6 +358,7 @@ function ContactForm(props) {
             id="validation-outlined-input"
             name="email"
           />
+          {!isValid ? <small>This field requires at least an @ sign</small> : ""}
           <ValidationTextField
             inputProps={{ inputMode: "text" }}
             fullWidth
