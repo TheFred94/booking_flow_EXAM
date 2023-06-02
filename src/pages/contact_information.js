@@ -16,7 +16,7 @@ import { useRouter } from "next/router";
 import CountdownTimer from "./CountdownTimer";
 import { MaterialSymbol } from "material-symbols";
 
-const ValidationTextFieldPhone = styled(TextField)(({ inputValue, error }) => ({
+const ValidationTextFieldPhone = styled(TextField)(({ isValid }) => ({
   "& label.Mui-focused": {
     color: "#f9f9f9", //label focused
   },
@@ -28,7 +28,8 @@ const ValidationTextFieldPhone = styled(TextField)(({ inputValue, error }) => ({
   },
   "& .MuiOutlinedInput-root": {
     "& fieldset": {
-      borderColor: "#F9F01F",
+      borderColor: isValid === false ? "#eb8686" : isValid === true ? "#00b88b" : "#f9f01f",
+      borderWidth: isValid === false ? 3 : isValid === true ? 3 : 2,
     },
     "&:hover fieldset": {
       borderColor: "#B2BAC2",
@@ -40,13 +41,13 @@ const ValidationTextFieldPhone = styled(TextField)(({ inputValue, error }) => ({
       borderColor: "#F9F01F",
     },
     "& input:valid + fieldset": {
-      borderColor: inputValue === 11 ? "#00b88b" : "",
+      borderColor: isValid === true ? "#00b88b" : "#F9F01F",
       borderWidth: 3,
     },
   },
 }));
 
-const ValidationTextFieldZip = styled(TextField)(({ inputValueZip }) => ({
+const ValidationTextFieldZip = styled(TextField)(({ inputValueZip, isValid }) => ({
   "& label.Mui-focused": {
     color: "#f9f9f9", //label focused
   },
@@ -58,7 +59,8 @@ const ValidationTextFieldZip = styled(TextField)(({ inputValueZip }) => ({
   },
   "& .MuiOutlinedInput-root": {
     "& fieldset": {
-      borderColor: "#F9F01F",
+      borderColor: isValid === false ? "#eb8686" : isValid === true ? "#00b88b" : "#f9f01f",
+      borderWidth: isValid === false ? 3 : isValid === true ? 3 : 2,
     },
     "& input": {
       color: "#f9f9f9", // Set the text color
@@ -72,13 +74,11 @@ const ValidationTextFieldZip = styled(TextField)(({ inputValueZip }) => ({
     "& input:valid + fieldset": {
       borderColor: "#00b88b",
       borderColor: inputValueZip === 4 ? "#00b88b" : "#F9F01F",
-
-      borderWidth: 3,
     },
   },
 }));
 
-const ValidationTextField = styled(TextField)({
+const ValidationTextField = styled(TextField)(({ isValid }) => ({
   "& label.Mui-focused": {
     color: "#f9f9f9", //label focused
   },
@@ -90,7 +90,8 @@ const ValidationTextField = styled(TextField)({
   },
   "& .MuiOutlinedInput-root": {
     "& fieldset": {
-      borderColor: "#F9F01F",
+      borderColor: isValid === false ? "#eb8686" : isValid === true ? "#00b88b" : "#f9f01f",
+      borderWidth: isValid === false ? 3 : isValid === true ? 3 : 2,
     },
     "& input": {
       color: "#f9f9f9", // Set the text color
@@ -106,7 +107,7 @@ const ValidationTextField = styled(TextField)({
       borderWidth: 3,
     },
   },
-});
+}));
 
 const TextMaskCustom = React.forwardRef(function TextMaskCustom(props, ref) {
   const { onChange, ...other } = props;
@@ -261,8 +262,8 @@ function ContactForm(props) {
   const [values, setValues] = React.useState({
     phoneNumber: "",
   });
-  const [isEmailValid, setIsEmailValid] = useState(true);
-  const [isPhoneValid, setIsPhoneValid] = useState(true);
+  const [isEmailValid, setIsEmailValid] = useState(null);
+  const [isPhoneValid, setIsPhoneValid] = useState(null);
 
   const handleChange = (event) => {
     setValues({
@@ -283,6 +284,7 @@ function ContactForm(props) {
     if (name === "phoneNumber") {
       setIsPhoneValid(value.length === 11);
     }
+    console.log(isPhoneValid);
   };
 
   const handleChangeZip = (event) => {
@@ -315,7 +317,15 @@ function ContactForm(props) {
         <AccordionDetails>
           <ValidationTextField
             className="text-color-white"
-            inputProps={{ inputMode: "text" }}
+            InputProps={{
+              inputMode: "text",
+              endAdornment: (
+                <>
+                  {isPhoneValid === true && <span class="material-symbols-outlined check">check_circle</span>}
+                  {isPhoneValid === false && <span class="material-symbols-outlined wrong">error</span>}
+                </>
+              ),
+            }}
             fullWidth
             type="text"
             label="First name"
@@ -326,7 +336,15 @@ function ContactForm(props) {
             name="firstName"
           />
           <ValidationTextField
-            inputProps={{ inputMode: "text" }}
+            InputProps={{
+              inputMode: "text",
+              endAdornment: (
+                <>
+                  {isPhoneValid === true && <span class="material-symbols-outlined check">check_circle</span>}
+                  {isPhoneValid === false && <span class="material-symbols-outlined wrong">error</span>}
+                </>
+              ),
+            }}
             fullWidth
             className="mt-4"
             type="text"
@@ -337,47 +355,71 @@ function ContactForm(props) {
             id="validation-outlined-input"
             name="lastName"
           />
-
           <ValidationTextFieldPhone
-            inputProps={{
-              inputMode: "tel",
-            }}
-            className={`mt-4 ${!isPhoneValid ? "shake" : ""}`}
+            className={`mt-4 ${isPhoneValid === false && "shake"}`}
             onChange={handleChange}
             id="formatted-text-mask-input"
-            InputProps={{ inputComponent: TextMaskCustom, endAdornment: !isPhoneValid ? <span class="material-symbols-outlined wrong">do_not_disturb_on</span> : "" }}
+            InputProps={{
+              inputMode: "tel",
+              inputComponent: TextMaskCustom,
+              endAdornment: (
+                <>
+                  {isPhoneValid === true && <span class="material-symbols-outlined check">check_circle</span>}
+                  {isPhoneValid === false && <span class="material-symbols-outlined wrong">error</span>}
+                </>
+              ),
+            }}
             fullWidth
             label="Phone number"
-            error={!isPhoneValid}
+            // error={!isPhoneValid}
             onBlur={handlePhone}
             required
             variant="outlined"
             value={values.phoneNumber}
             inputValue={inputValue}
             name="phoneNumber"
+            isValid={isPhoneValid}
           />
-          {!isPhoneValid && (
+          {isPhoneValid === false && (
             <small className="font-sans">
               Please enter a valid phone number e.g: <span className="font-sans font-thin">22 22 22 22</span>
             </small>
           )}
+          {isPhoneValid === false && ""}
           <ValidationTextField
-            InputProps={{ inputMode: "email", endAdornment: !isEmailValid ? <span class="material-symbols-outlined wrong">do_not_disturb_on</span> : "" }}
+            InputProps={{
+              inputMode: "email",
+              endAdornment: (
+                <>
+                  {isEmailValid === true && <span class="material-symbols-outlined check">check_circle</span>}
+                  {isEmailValid === false && <span class="material-symbols-outlined wrong">error</span>}
+                </>
+              ),
+            }}
             type="email"
-            error={!isEmailValid}
+            // error={isEmailValid}
             onBlur={handleEmail}
             fullWidth
-            className={`mt-4 ${!isEmailValid ? "shake" : ""}`}
+            className={`mt-4 ${isEmailValid === false && "shake"}`}
             label="Email"
             required
             variant="outlined"
             defaultValue=""
             id="validation-outlined-input"
             name="email"
+            isValid={isEmailValid}
           />
-          {!isEmailValid && <small className="font-sans">Email must contain at least an @ sign</small>}
+          {isEmailValid === false && <small className="font-sans">Email must contain at least an @ sign</small>}
           <ValidationTextField
-            inputProps={{ inputMode: "text" }}
+            InputProps={{
+              inputMode: "text",
+              endAdornment: (
+                <>
+                  {isEmailValid === true && <span class="material-symbols-outlined check">check_circle</span>}
+                  {isEmailValid === false && <span class="material-symbols-outlined wrong">error</span>}
+                </>
+              ),
+            }}
             fullWidth
             className="mt-4"
             type="text"
@@ -389,7 +431,7 @@ function ContactForm(props) {
             name="streetAdress"
           />
           <ValidationTextFieldZip
-            inputProps={{ inputMode: "decimal" }}
+            InputProps={{ inputMode: "decimal" }}
             type="number"
             fullWidth
             className="mt-4"
