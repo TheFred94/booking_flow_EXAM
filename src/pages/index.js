@@ -61,7 +61,33 @@ export default function AreaAndAmount(props) {
       <p className="mx-auto my-10 max-w-2xl">
         With the mesmerizing <strong>Northern Lights</strong> as your backdrop, get ready to lose yourself to the beats of the loudest music that's sure to get your heart racing.
       </p>
+
       <Stepper
+        className="m-auto mb-10 max-w-screen-md "
+        sx={{
+          "& .MuiSvgIcon-root": {
+            color: "#969696",
+          },
+          "& .Mui-active": {
+            color: "#F9F01F",
+          },
+          "& .Mui-completed": {
+            color: "#F9F01F",
+          },
+          "& .MuiStepIcon-text": {
+            fill: "#102038",
+            fontFamily: "Gill Sans",
+            fontSize: "1rem",
+            fontWeight: "600",
+          },
+          "& .MuiStepIcon-root:active": {
+            color: "#F9F01F",
+          },
+          "& .MuiStepLabel-label": {
+            color: "#F9F9F9",
+            fontWeight: "500",
+          },
+        }}
         activeStep={0}
         alternativeLabel
       >
@@ -71,6 +97,7 @@ export default function AreaAndAmount(props) {
           </Step>
         ))}
       </Stepper>
+
       <div className="mx-auto max-w-3xl">
         {/* component, that lets user choose amount of tickets */}
         <ChooseAmount />

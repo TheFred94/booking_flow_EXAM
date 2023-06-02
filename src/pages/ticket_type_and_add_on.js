@@ -60,6 +60,22 @@ export default function TicketTypeAndAddOn() {
         </h2>
 
         <Stepper
+          className="m-auto mb-10 max-w-screen-md "
+          sx={{
+            "& .MuiSvgIcon-root": {
+              color: "#969696",
+            },
+            "& .MuiStepIcon-text": {
+              fill: "#102038",
+              fontFamily: "Gill Sans",
+              fontSize: "1rem",
+              fontWeight: "600",
+            },
+            "& .MuiStepLabel-label": {
+              color: "#F9F9F9",
+              fontWeight: "500",
+            },
+          }}
           activeStep={1}
           alternativeLabel
         >

@@ -205,10 +205,26 @@ function Contact(props) {
 
   return (
     <>
-      <h2 className="mt-48 ">Enter your information</h2>
+      <h2 className="mb-10 mt-48 text-center ">Enter your information</h2>
       <CountdownTimer />
 
       <Stepper
+        className="m-auto mb-10 max-w-screen-md "
+        sx={{
+          "& .MuiSvgIcon-root": {
+            color: "#969696",
+          },
+          "& .MuiStepIcon-text": {
+            fill: "#102038",
+            fontFamily: "Gill Sans",
+            fontSize: "1rem",
+            fontWeight: "600",
+          },
+          "& .MuiStepLabel-label": {
+            color: "#F9F9F9",
+            fontWeight: "500",
+          },
+        }}
         activeStep={3}
         alternativeLabel
       >

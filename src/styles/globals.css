@@ -85,6 +85,25 @@ span {
   color: #f9f9f9;
 }
 
+.css-1u4zpwo-MuiSvgIcon-root-MuiStepIcon-root.Mui-active {
+  color: #f9f01f;
+}
+
+.css-1hv8oq8-MuiStepLabel-label.Mui-active {
+  color: #f9f9f9;
+}
+
+.css-1hv8oq8-MuiStepLabel-label.Mui-completed {
+  color: #f9f9f9;
+}
+
+.css-1u4zpwo-MuiSvgIcon-root-MuiStepIcon-root.Mui-completed {
+  color: #f9f01f;
+}
+
+.material-symbols-outlined {
+  font-variation-settings: "FILL" 1, "wght" 400, "GRAD" 0, "opsz" 48;
+}
 .check {
   color: #00b88b;
 }
