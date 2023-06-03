@@ -29,8 +29,8 @@ export const ValidationTextFieldCardNum = styled(TextField)(({ isValid }) => ({
       borderWidth: 3,
     },
     "& input:valid + fieldset": {
-      borderColor: "#00b88b",
       borderColor: isValid === true ? "#00b88b" : "#F9F01F",
+      borderWidth: 3,
     },
   },
 }));
@@ -61,8 +61,8 @@ export const ValidationTextFieldCardHolderName = styled(TextField)(({ isValid })
       borderWidth: 3,
     },
     "& input:valid + fieldset": {
-      borderColor: "#00b88b",
       borderColor: isValid === true ? "#00b88b" : "#F9F01F",
+      borderWidth: 3,
     },
   },
 }));
@@ -76,7 +76,8 @@ export const ValidationTextFieldMonthYear = styled(TextField)(({ isValid }) => (
 
   "& .MuiOutlinedInput-root": {
     "& fieldset ": {
-      borderColor: "#F9F01F",
+      borderColor: isValid === false ? "#eb8686" : isValid === true ? "#00b88b" : "#f9f01f",
+      borderWidth: isValid === false ? 2 : isValid === true ? 3 : 2,
     },
     "& input": {
       color: "#f9f9f9", // Set the text color
@@ -90,7 +91,7 @@ export const ValidationTextFieldMonthYear = styled(TextField)(({ isValid }) => (
     },
     "& input:valid + fieldset": {
       borderColor: isValid === true ? "#00b88b" : "#F9F01F",
-      borderWidth: 2,
+      borderWidth: 3,
     },
   },
 }));
@@ -104,7 +105,8 @@ export const ValidationTextFieldCvc = styled(TextField)(({ isValid }) => ({
 
   "& .MuiOutlinedInput-root": {
     "& fieldset ": {
-      borderColor: "#F9F01F",
+      borderColor: isValid === false ? "#eb8686" : isValid === true ? "#00b88b" : "#f9f01f",
+      borderWidth: isValid === false ? 2 : isValid === true ? 3 : 2,
     },
     "& input": {
       color: "#f9f9f9", // Set the text color
@@ -118,7 +120,7 @@ export const ValidationTextFieldCvc = styled(TextField)(({ isValid }) => ({
     },
     "& input:valid + fieldset": {
       borderColor: isValid === true ? "#00b88b" : "#F9F01F",
-      borderWidth: 2,
+      borderWidth: 3,
     },
   },
 }));
