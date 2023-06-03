@@ -336,7 +336,6 @@ function ContactForm(props) {
   const [dataSuggestion, setDataSuggestion] = useState([]);
   const [address, setAddress] = useState("");
   const [isAddressValid, setIsAddressValid] = useState(null);
-  const [isZipCodeValid, setIsZipCodeValid] = useState(null);
 
   const handleChange = (event) => {
     setValues({
@@ -359,19 +358,35 @@ function ContactForm(props) {
     }
     console.log(isPhoneValid);
   };
-  const handleZipCode = (event) => {
-    const { name, value } = event.target;
-    if (name === "zipCode") {
-      setIsZipCodeValid(value.length === 4);
+
+  const validateInput = (name, value) => {
+    if (value.trim() === "") {
+      // Input field is empty
+      return false;
     }
-    console.log(isPhoneValid);
+
+    let hasNumbers = false;
+    for (let i = 0; i < value.length; i++) {
+      if (!isNaN(parseInt(value[i]))) {
+        hasNumbers = true;
+        break;
+      }
+    }
+    return !hasNumbers;
   };
 
-  const handleChangeZip = (event) => {
-    const limit = 4;
+  const handleFirstName = (event) => {
+    const { name, value } = event.target;
+    if (name === "firstName") {
+      setIsFirstNameValid(validateInput(name, value));
+    }
+  };
 
-    setZipCode(event.target.value.slice(0, limit));
-    // console.log(event.target.value.length);
+  const handleLastName = (event) => {
+    const { name, value } = event.target;
+    if (name === "lastName") {
+      setIsLastNameValid(validateInput(name, value));
+    }
   };
 
   const handleAddress = async (event) => {
@@ -390,7 +405,6 @@ function ContactForm(props) {
     }
   };
   const inputValue = values.phoneNumber.length;
-  const inputValueZip = zipCode.length;
 
   return (
     <form
