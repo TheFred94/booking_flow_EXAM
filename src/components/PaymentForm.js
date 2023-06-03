@@ -284,7 +284,6 @@ export function PaymentForm(props) {
         InputProps={{
           inputMode: "decimal",
           inputComponent: TextMaskCustom,
-
           endAdornment: (
             <>
               {isCardNumberValid === true && <span class="material-symbols-outlined check">check_circle</span>}
@@ -331,9 +330,7 @@ export function PaymentForm(props) {
             name="monthYear"
             isValid={isMonthYearValid}
           />
-          <small>
-            E.g <span className="font-thin">12/12</span>
-          </small>
+          {isMonthYearValid === null ? <small>E.g 00/00</small> : isMonthYearValid === true ? <small className="text-color-opacity-0">True</small> : isMonthYearValid === false ? <small>Please enter a valid month and date e.g 12/23</small> : <small></small>}
         </div>
         <div className="ml-4 flex flex-col gap-2">
           <ValidationTextFieldCvc
@@ -359,9 +356,7 @@ export function PaymentForm(props) {
             name="cvc"
             isValid={isCvcValid}
           />
-          <small>
-            E.g <span className="font-thin">123</span>
-          </small>
+          {isCvcValid === null ? <small>E.g 000</small> : isCvcValid === true ? <small className="text-color-opacity-0">True</small> : isCvcValid === false ? <small>Please enter a valid number E.g 123</small> : <small></small>}
         </div>
       </div>
 
