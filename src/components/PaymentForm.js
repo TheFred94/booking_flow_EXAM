@@ -3,63 +3,69 @@ import Button from "@mui/material/Button";
 import styled from "@emotion/styled";
 import TextField from "@mui/material/TextField";
 import { IMaskInput } from "react-imask";
-export const ValidationTextFieldCardNum = styled(TextField)(({ inputValue }) => ({
+export const ValidationTextFieldCardNum = styled(TextField)(({ isValid }) => ({
   "& label.Mui-focused": {
     color: "#f9f9f9", //label focused
   },
   "& label": {
     color: "#f9f9f9", //label unfocused
   },
-
+  "& .MuiInput-underline:after": {
+    borderBottomColor: "#B2BAC2",
+  },
   "& .MuiOutlinedInput-root": {
-    "& fieldset ": {
-      borderColor: "#F9F01F",
+    "& fieldset": {
+      borderColor: isValid === false ? "#eb8686" : isValid === true ? "#00b88b" : "#f9f01f",
+      borderWidth: isValid === false ? 2 : isValid === true ? 3 : 2,
     },
     "& input": {
       color: "#f9f9f9", // Set the text color
     },
-
     "&:hover fieldset": {
-      borderColor: "#F9F01F",
+      borderColor: "#B2BAC2",
     },
     "&.Mui-focused fieldset": {
       borderColor: "#F9F01F",
+      borderWidth: 3,
     },
     "& input:valid + fieldset": {
-      borderColor: inputValue === 19 ? "green" : "F9F01F",
-      borderWidth: 2,
+      borderColor: "#00b88b",
+      borderColor: isValid === true ? "#00b88b" : "#F9F01F",
     },
   },
 }));
 
-export const ValidationTextFieldCardHolderName = styled(TextField)({
+export const ValidationTextFieldCardHolderName = styled(TextField)(({ isValid }) => ({
   "& label.Mui-focused": {
     color: "#f9f9f9", //label focused
   },
   "& label": {
     color: "#f9f9f9", //label unfocused
   },
-
+  "& .MuiInput-underline:after": {
+    borderBottomColor: "#B2BAC2",
+  },
   "& .MuiOutlinedInput-root": {
-    "& fieldset ": {
-      borderColor: "#F9F01F",
-      color: "#F9F01F",
+    "& fieldset": {
+      borderColor: isValid === false ? "#eb8686" : isValid === true ? "#00b88b" : "#f9f01f",
+      borderWidth: isValid === false ? 2 : isValid === true ? 3 : 2,
     },
     "& input": {
       color: "#f9f9f9", // Set the text color
     },
     "&:hover fieldset": {
-      borderColor: "#F9F01F",
+      borderColor: "#B2BAC2",
     },
     "&.Mui-focused fieldset": {
       borderColor: "#F9F01F",
+      borderWidth: 3,
     },
     "& input:valid + fieldset": {
-      borderColor: "green",
-      borderWidth: 2,
+      borderColor: "#00b88b",
+      borderColor: isValid === true ? "#00b88b" : "#F9F01F",
     },
   },
-});
+}));
 export const ValidationTextFieldMonthYear = styled(TextField)(({ inputValue }) => ({
   "& label.Mui-focused": {
     color: "#f9f9f9", //label focused
