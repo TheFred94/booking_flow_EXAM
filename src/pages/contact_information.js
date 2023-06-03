@@ -308,6 +308,11 @@ function ContactForm(props) {
   };
 
   const validateInput = (name, value) => {
+    if (value.trim() === "") {
+      // Input field is empty
+      return false;
+    }
+
     let hasNumbers = false;
     for (let i = 0; i < value.length; i++) {
       if (!isNaN(parseInt(value[i]))) {
@@ -317,7 +322,6 @@ function ContactForm(props) {
     }
     return !hasNumbers;
   };
-
   const handleFirstName = (event) => {
     const { name, value } = event.target;
     if (name === "firstName") {
@@ -404,7 +408,7 @@ function ContactForm(props) {
             name="firstName"
             isValid={isFirstNameValid}
           />
-          {isFirstNameValid === false && <small className="font-sans">Firstnames can't contain numbers!</small>}
+          {isFirstNameValid === false && <small className="font-sans">Please enter a valid firstname</small>}
           <ValidationTextField
             InputProps={{
               inputMode: "text",
@@ -427,7 +431,7 @@ function ContactForm(props) {
             name="lastName"
             isValid={isLastNameValid}
           />
-          {isLastNameValid === false && <small className="font-sans">Lastnames can't contain numbers!</small>}
+          {isLastNameValid === false && <small className="font-sans">Please enter a valid lastname</small>}
           <ValidationTextFieldPhone
             className={`mt-4 ${isPhoneValid === false && "shake"}`}
             onChange={handleChange}
