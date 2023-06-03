@@ -66,7 +66,7 @@ export const ValidationTextFieldCardHolderName = styled(TextField)(({ isValid })
     },
   },
 }));
-export const ValidationTextFieldMonthYear = styled(TextField)(({ inputValue }) => ({
+export const ValidationTextFieldMonthYear = styled(TextField)(({ isValid }) => ({
   "& label.Mui-focused": {
     color: "#f9f9f9", //label focused
   },
@@ -89,12 +89,12 @@ export const ValidationTextFieldMonthYear = styled(TextField)(({ inputValue }) =
       borderColor: "#F9F01F",
     },
     "& input:valid + fieldset": {
-      borderColor: inputValue === 5 ? "green" : "F9F01F",
+      borderColor: isValid === 5 ? "green" : "F9F01F",
       borderWidth: 2,
     },
   },
 }));
-export const ValidationTextFieldCvc = styled(TextField)(({ inputValue }) => ({
+export const ValidationTextFieldCvc = styled(TextField)(({ isValid }) => ({
   "& label.Mui-focused": {
     color: "#f9f9f9", //label focused
   },
@@ -117,8 +117,7 @@ export const ValidationTextFieldCvc = styled(TextField)(({ inputValue }) => ({
       borderColor: "#F9F01F",
     },
     "& input:valid + fieldset": {
-      borderColor: "green",
-      borderColor: inputValue === 3 ? "green" : "F9F01F",
+      borderColor: isValid === 5 ? "green" : "F9F01F",
       borderWidth: 2,
     },
   },
@@ -181,6 +180,7 @@ export function PaymentForm(props) {
     cvc: "",
   });
   const [isCardHolderNameValid, setIsCardHolderNameValid] = useState(null);
+  const [isCardNumberValid, setIsCardNumberValid] = useState(null);
 
   const validateInput = (name, value) => {
     if (value.trim() === "") {
@@ -202,6 +202,13 @@ export function PaymentForm(props) {
     const { name, value } = event.target;
     if (name === "card-holder-name") {
       setIsCardHolderNameValid(validateInput(name, value));
+    }
+  };
+
+  const handleCardNumber = (event) => {
+    const { name, value } = event.target;
+    if (name === "cardNumber") {
+      setIsCardNumberValid(value.length === 19);
     }
   };
 
@@ -257,13 +264,23 @@ export function PaymentForm(props) {
         name="card-holder-name"
         isValid={isCardHolderNameValid}
       />
-      {isCardHolderNameValid === null ? <small>Enter the name of the card holder</small> : isCardHolderNameValid === true ? "" : isCardHolderNameValid === false ? <small>Please enter a valid name</small> : ""}
+      {isCardHolderNameValid === null ? <small>Enter the name of the card holder</small> : isCardHolderNameValid === true ? <small className="text-color-opacity-0">True</small> : isCardHolderNameValid === false ? <small>Please enter a valid name</small> : <small></small>}
       <ValidationTextFieldCardNum
-        inputProps={{ inputMode: "decimal" }}
-        className="mt-4"
+        InputProps={{
+          inputMode: "decimal",
+          inputComponent: TextMaskCustom,
+
+          endAdornment: (
+            <>
+              {isCardNumberValid === true && <span class="material-symbols-outlined check">check_circle</span>}
+              {isCardNumberValid === false && <span class="material-symbols-outlined wrong">error</span>}
+            </>
+          ),
+        }}
+        className={`mt-4 ${isCardNumberValid === false && "shake"}`}
         onChange={handleChange}
+        onBlur={handleCardNumber}
         id="formatted-text-mask-input"
-        InputProps={{ inputComponent: TextMaskCustom }}
         fullWidth
         label="Card number"
         required
@@ -271,10 +288,9 @@ export function PaymentForm(props) {
         value={cardNumberValue.cardNumber}
         inputValue={inputValue}
         name="cardNumber"
+        isValid={isCardNumberValid}
       />
-      <small>
-        E.g <span className="font-thin">1234-5678-9101-1123</span>
-      </small>
+      {isCardNumberValid === null ? <small>1234-5678-9101-1213</small> : isCardNumberValid === true ? <small className="text-color-opacity-0">True</small> : isCardNumberValid === false ? <small>Please enter a card number</small> : <small></small>}
       <div className="flex flex-row">
         <div className="flex flex-col gap-2">
           <ValidationTextFieldMonthYear

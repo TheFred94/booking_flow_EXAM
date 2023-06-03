@@ -30,6 +30,7 @@ module.exports = {
       "color-opacity-40": "rgba(255, 255, 255, 0.4)",
       "color-opacity-20": "rgba(255, 255, 255, 0.2)",
       "color-opacity-10": "rgba(255, 255, 255, 0.1)",
+      "color-opacity-0": "rgba(255, 255, 255, 0.0)",
       "color-yellow-75": "rgba(249,249,249,.75)",
       // "color-yellow-75": "rgba(249,240,31,.75)",
       "color-orange": "#E4A74A",
