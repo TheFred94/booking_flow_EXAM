@@ -52,38 +52,6 @@ const ValidationTextFieldPhone = styled(TextField)(({ isValid }) => ({
   },
 }));
 
-const ValidationTextFieldZip = styled(TextField)(({ inputValueZip, isValid }) => ({
-  "& label.Mui-focused": {
-    color: "#f9f9f9", //label focused
-  },
-  "& label": {
-    color: "#f9f9f9", //label unfocused
-  },
-  "& .MuiInput-underline:after": {
-    borderBottomColor: "#B2BAC2",
-  },
-  "& .MuiOutlinedInput-root": {
-    "& fieldset": {
-      borderColor: isValid === false ? "#eb8686" : isValid === true ? "#00b88b" : "#f9f01f",
-      borderWidth: isValid === false ? 3 : isValid === true ? 3 : 2,
-    },
-    "& input": {
-      color: "#f9f9f9", // Set the text color
-    },
-    "&:hover fieldset": {
-      borderColor: "#B2BAC2",
-    },
-    "&.Mui-focused fieldset": {
-      borderColor: "#B2BAC2",
-      borderWidth: 3,
-    },
-    "& input:valid + fieldset": {
-      borderColor: "#00b88b",
-      borderColor: isValid === 4 ? "#00b88b" : "#F9F01F",
-    },
-  },
-}));
-
 const ValidationTextField = styled(TextField)(({ isValid }) => ({
   "& label.Mui-focused": {
     color: "#f9f9f9", //label focused

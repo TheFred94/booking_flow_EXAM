@@ -167,15 +167,8 @@ export default function payment(props) {
         <Stepper
           className="m-auto mb-10 max-w-screen-md "
           sx={{
-            width: "50%",
             "& .MuiSvgIcon-root": {
               color: "#969696",
-            },
-            "& .Mui-active": {
-              color: "#F9F01F",
-            },
-            "& .Mui-completed": {
-              color: "#F9F01F",
             },
             "& .MuiStepIcon-text": {
               fill: "#102038",

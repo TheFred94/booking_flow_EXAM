@@ -216,7 +216,7 @@ export function PaymentForm(props) {
         id="validation-outlined-input"
         name="card-holder-name"
       />
-
+      <small>Enter the name of the card holder</small>
       <ValidationTextFieldCardNum
         inputProps={{ inputMode: "decimal" }}
         className="mt-4"
@@ -231,35 +231,46 @@ export function PaymentForm(props) {
         inputValue={inputValue}
         name="cardNumber"
       />
-      <div className="flex gap-2">
-        <ValidationTextFieldMonthYear
-          inputProps={{ inputMode: "decimal" }}
-          className="mt-4"
-          onChange={handleChangemonthYearValue}
-          id="formatted-text-mask-input"
-          InputProps={{ inputComponent: TextMaskmonthYearValue }}
-          fullWidth
-          label="Month/Year"
-          required
-          variant="outlined"
-          value={monthYearValue.monthYear}
-          inputValue={inputValuemonthYearValue}
-          name="monthYear"
-        />
-        <ValidationTextFieldCvc
-          inputProps={{ inputMode: "decimal" }}
-          className="mt-4"
-          onChange={handleChangeCvc}
-          id="formatted-text-mask-input"
-          InputProps={{ inputComponent: TextMaskCvc }}
-          fullWidth
-          label="CVC"
-          required
-          variant="outlined"
-          value={cvcValue.cvc}
-          inputValue={inputValueCvc}
-          name="cvc"
-        />
+      <small>
+        E.g <span className="font-thin">1234-5678-9101-1123</span>
+      </small>
+      <div className="flex flex-row">
+        <div className="flex flex-col gap-2">
+          <ValidationTextFieldMonthYear
+            inputProps={{ inputMode: "decimal" }}
+            className="mt-4"
+            onChange={handleChangemonthYearValue}
+            id="formatted-text-mask-input"
+            InputProps={{ inputComponent: TextMaskmonthYearValue }}
+            label="Month/Year"
+            required
+            variant="outlined"
+            value={monthYearValue.monthYear}
+            inputValue={inputValuemonthYearValue}
+            name="monthYear"
+          />
+          <small>
+            E.g <span className="font-thin">12/12</span>
+          </small>
+        </div>
+        <div className="ml-4 flex flex-col gap-2">
+          <ValidationTextFieldCvc
+            inputProps={{ inputMode: "decimal" }}
+            className="mt-4"
+            onChange={handleChangeCvc}
+            id="formatted-text-mask-input"
+            InputProps={{ inputComponent: TextMaskCvc }}
+            label="CVC"
+            required
+            variant="outlined"
+            value={cvcValue.cvc}
+            inputValue={inputValueCvc}
+            name="cvc"
+          />
+          <small>
+            E.g <span className="font-thin">123</span>
+          </small>
+        </div>
       </div>
 
       {/* <ValidationTextField
