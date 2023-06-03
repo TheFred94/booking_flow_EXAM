@@ -174,6 +174,30 @@ export function PaymentForm(props) {
   const [cvcValue, setCvcValue] = useState({
     cvc: "",
   });
+  const [isCardHolderNameValid, setIsCardHolderNameValid] = useState(null);
+
+  const validateInput = (name, value) => {
+    if (value.trim() === "") {
+      // Input field is empty
+      return false;
+    }
+
+    let hasNumbers = false;
+    for (let i = 0; i < value.length; i++) {
+      if (!isNaN(parseInt(value[i]))) {
+        hasNumbers = true;
+        break;
+      }
+    }
+    return !hasNumbers;
+  };
+
+  const handleCardHolderName = (event) => {
+    const { name, value } = event.target;
+    if (name === "card-holder-name") {
+      setIsCardHolderNameValid(validateInput(name, value));
+    }
+  };
 
   const handleChangeCvc = (event) => {
     setCvcValue({
@@ -206,7 +230,17 @@ export function PaymentForm(props) {
       onSubmit={props.handleSubmit}
     >
       <ValidationTextFieldCardHolderName
-        inputProps={{ inputMode: "text" }}
+        className={`mt-4 ${isCardHolderNameValid === false && "shake"}`}
+        InputProps={{
+          inputMode: "text",
+          endAdornment: (
+            <>
+              {isCardHolderNameValid === true && <span class="material-symbols-outlined check">check_circle</span>}
+              {isCardHolderNameValid === false && <span class="material-symbols-outlined wrong">error</span>}
+            </>
+          ),
+        }}
+        onBlur={handleCardHolderName}
         fullWidth
         type="text"
         label="Card holder name"
@@ -215,8 +249,9 @@ export function PaymentForm(props) {
         defaultValue=""
         id="validation-outlined-input"
         name="card-holder-name"
+        isValid={isCardHolderNameValid}
       />
-      <small>Enter the name of the card holder</small>
+      {isCardHolderNameValid === null ? <small>Enter the name of the card holder</small> : isCardHolderNameValid === true ? "" : isCardHolderNameValid === false ? <small>Please enter a valid name</small> : ""}
       <ValidationTextFieldCardNum
         inputProps={{ inputMode: "decimal" }}
         className="mt-4"
