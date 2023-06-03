@@ -337,6 +337,27 @@ function ContactForm(props) {
   const [address, setAddress] = useState("");
   const [isAddressValid, setIsAddressValid] = useState(null);
 
+  useEffect(() => {
+    if (address) {
+      console.log(address);
+      fetch(`https://api.dataforsyningen.dk/autocomplete?q=${address}&caretpos=18&fuzzy=`).then((res) =>
+        res
+          .json()
+          .then((data) => {
+            const suggestAddress = data.map((adr) => ({
+              value: adr.forslagstekst.toLowerCase(),
+              label: adr.forslagstekst,
+            }));
+            setDataSuggestion(suggestAddress);
+            console.log(data);
+          })
+          .catch((error) => {
+            console.log(error);
+          })
+      );
+    }
+  }, [address]);
+
   const handleChange = (event) => {
     setValues({
       ...values,
