@@ -198,15 +198,14 @@ function Contact(props) {
     console.log(formArray);
   };
 
-  const handleSubmit = (event) => {
+  const handleSubmit = (event, address) => {
     event.preventDefault();
     const formData = {
       firstName: event.target.firstName.value,
       lastName: event.target.lastName.value,
       phoneNumber: event.target.phoneNumber.value,
       email: event.target.email.value,
-      streetAdress: event.target.streetAdress.value,
-      zipCode: event.target.zipCode.value,
+      streetAdress: event.target.addressField.value,
     };
 
     setFormArray((prevFormArray) => [...prevFormArray, formData]);
@@ -564,9 +563,9 @@ function ContactForm(props) {
               <TextField
                 {...params}
                 label="Address"
+                name="addressField"
               />
             )}
-            name="addressField"
           />
           {isAddressValid === false && <small className="font-sans">Please enter a valid address!</small>}
         </AccordionDetails>
