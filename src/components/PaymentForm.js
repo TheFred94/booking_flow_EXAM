@@ -89,7 +89,7 @@ export const ValidationTextFieldMonthYear = styled(TextField)(({ isValid }) => (
       borderColor: "#F9F01F",
     },
     "& input:valid + fieldset": {
-      borderColor: isValid === 5 ? "green" : "F9F01F",
+      borderColor: isValid === true ? "#00b88b" : "#F9F01F",
       borderWidth: 2,
     },
   },
@@ -117,7 +117,7 @@ export const ValidationTextFieldCvc = styled(TextField)(({ isValid }) => ({
       borderColor: "#F9F01F",
     },
     "& input:valid + fieldset": {
-      borderColor: isValid === 5 ? "green" : "F9F01F",
+      borderColor: isValid === true ? "#00b88b" : "#F9F01F",
       borderWidth: 2,
     },
   },
@@ -181,6 +181,8 @@ export function PaymentForm(props) {
   });
   const [isCardHolderNameValid, setIsCardHolderNameValid] = useState(null);
   const [isCardNumberValid, setIsCardNumberValid] = useState(null);
+  const [isMonthYearValid, setIsMonthYearValid] = useState(null);
+  const [isCvcValid, setIsCvcValid] = useState(null);
 
   const validateInput = (name, value) => {
     if (value.trim() === "") {
@@ -210,6 +212,19 @@ export function PaymentForm(props) {
     if (name === "cardNumber") {
       setIsCardNumberValid(value.length === 19);
     }
+  };
+  const handleMonthYear = (event) => {
+    const { name, value } = event.target;
+    if (name === "monthYear") {
+      setIsMonthYearValid(value.length === 5);
+    }
+  };
+  const handleCvc = (event) => {
+    const { name, value } = event.target;
+    if (name === "cvc") {
+      setIsCvcValid(value.length === 3);
+    }
+    console.log(isCvcValid);
   };
 
   const handleChangeCvc = (event) => {
@@ -290,21 +305,31 @@ export function PaymentForm(props) {
         name="cardNumber"
         isValid={isCardNumberValid}
       />
-      {isCardNumberValid === null ? <small>1234-5678-9101-1213</small> : isCardNumberValid === true ? <small className="text-color-opacity-0">True</small> : isCardNumberValid === false ? <small>Please enter a card number</small> : <small></small>}
+      {isCardNumberValid === null ? <small>E.g 0000-0000-0000-0000</small> : isCardNumberValid === true ? <small className="text-color-opacity-0">True</small> : isCardNumberValid === false ? <small>Please enter a valid card number</small> : <small></small>}
       <div className="flex flex-row">
         <div className="flex flex-col gap-2">
           <ValidationTextFieldMonthYear
-            inputProps={{ inputMode: "decimal" }}
-            className="mt-4"
+            InputProps={{
+              inputMode: "decimal",
+              inputComponent: TextMaskmonthYearValue,
+              endAdornment: (
+                <>
+                  {isMonthYearValid === true && <span class="material-symbols-outlined check">check_circle</span>}
+                  {isMonthYearValid === false && <span class="material-symbols-outlined wrong">error</span>}
+                </>
+              ),
+            }}
+            className={`mt-4 ${isMonthYearValid === false && "shake"}`}
+            onBlur={handleMonthYear}
             onChange={handleChangemonthYearValue}
             id="formatted-text-mask-input"
-            InputProps={{ inputComponent: TextMaskmonthYearValue }}
             label="Month/Year"
             required
             variant="outlined"
             value={monthYearValue.monthYear}
             inputValue={inputValuemonthYearValue}
             name="monthYear"
+            isValid={isMonthYearValid}
           />
           <small>
             E.g <span className="font-thin">12/12</span>
@@ -312,17 +337,27 @@ export function PaymentForm(props) {
         </div>
         <div className="ml-4 flex flex-col gap-2">
           <ValidationTextFieldCvc
-            inputProps={{ inputMode: "decimal" }}
-            className="mt-4"
+            InputProps={{
+              inputMode: "decimal",
+              inputComponent: TextMaskCvc,
+              endAdornment: (
+                <>
+                  {isCvcValid === true && <span class="material-symbols-outlined check">check_circle</span>}
+                  {isCvcValid === false && <span class="material-symbols-outlined wrong">error</span>}
+                </>
+              ),
+            }}
+            className={`mt-4 ${isCvcValid === false && "shake"}`}
+            onBlur={handleCvc}
             onChange={handleChangeCvc}
             id="formatted-text-mask-input"
-            InputProps={{ inputComponent: TextMaskCvc }}
             label="CVC"
             required
             variant="outlined"
             value={cvcValue.cvc}
             inputValue={inputValueCvc}
             name="cvc"
+            isValid={isCvcValid}
           />
           <small>
             E.g <span className="font-thin">123</span>
