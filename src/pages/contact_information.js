@@ -14,6 +14,7 @@ import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import PriceDrawer from "@/components/PriceDrawer";
 import { useRouter } from "next/router";
 import CountdownTimer from "./CountdownTimer";
+import Autocomplete from "@mui/material/Autocomplete";
 import { MaterialSymbol } from "material-symbols";
 
 const ValidationTextFieldPhone = styled(TextField)(({ isValid }) => ({
@@ -264,6 +265,8 @@ function ContactForm(props) {
   });
   const [isEmailValid, setIsEmailValid] = useState(null);
   const [isPhoneValid, setIsPhoneValid] = useState(null);
+  const [dataSuggestion, setDataSuggestion] = useState([]);
+  const [address, setAddress] = useState("");
 
   const handleChange = (event) => {
     setValues({
@@ -271,6 +274,27 @@ function ContactForm(props) {
       [event.target.name]: event.target.value,
     });
   };
+
+  useEffect(() => {
+    if (address) {
+      console.log(address);
+      fetch(`https://api.dataforsyningen.dk/autocomplete?q=${address}&caretpos=18&fuzzy=`).then((res) =>
+        res
+          .json()
+          .then((data) => {
+            const suggestAddress = data.map((adr) => ({
+              value: adr.forslagstekst.toLowerCase(),
+              label: adr.forslagstekst,
+            }));
+            setDataSuggestion(suggestAddress);
+            console.log(data);
+          })
+          .catch((error) => {
+            console.log(error);
+          })
+      );
+    }
+  }, [address]);
 
   const handleEmail = (event) => {
     const { name, value } = event.target;
@@ -428,7 +452,22 @@ function ContactForm(props) {
             variant="outlined"
             defaultValue=""
             id="validation-outlined-input"
-            name="streetAdress"
+            name="streetAddress"
+          />
+          <Autocomplete
+            disablePortal
+            getOptionLabel={(address) => address.label}
+            id="addressSearch"
+            inputValue={address}
+            onInputChange={(event, newAddress) => setAddress(newAddress)}
+            options={dataSuggestion}
+            sx={{ width: 300 }}
+            renderInput={(params) => (
+              <TextField
+                {...params}
+                label="Address"
+              />
+            )}
           />
           <ValidationTextFieldZip
             InputProps={{ inputMode: "decimal" }}
