@@ -325,7 +325,6 @@ function Contact(props) {
 }
 
 function ContactForm(props) {
-  const [zipCode, setZipCode] = useState("");
   const [values, setValues] = React.useState({
     phoneNumber: "",
   });
