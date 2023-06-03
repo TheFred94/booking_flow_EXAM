@@ -14,6 +14,7 @@ import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import PriceDrawer from "@/components/PriceDrawer";
 import { useRouter } from "next/router";
 import CountdownTimer from "./CountdownTimer";
+import Autocomplete from "@mui/material/Autocomplete";
 import { MaterialSymbol } from "material-symbols";
 import Stepper from "@mui/material/Stepper";
 import Step from "@mui/material/Step";
@@ -42,6 +43,7 @@ const ValidationTextFieldPhone = styled(TextField)(({ isValid }) => ({
     },
     "&.Mui-focused fieldset": {
       borderColor: "#F9F01F",
+      borderWidth: 3,
     },
     "& input:valid + fieldset": {
       borderColor: isValid === true ? "#00b88b" : "#F9F01F",
@@ -72,7 +74,8 @@ const ValidationTextFieldZip = styled(TextField)(({ inputValueZip, isValid }) =>
       borderColor: "#B2BAC2",
     },
     "&.Mui-focused fieldset": {
-      borderColor: "yellow",
+      borderColor: "#B2BAC2",
+      borderWidth: 3,
     },
     "& input:valid + fieldset": {
       borderColor: "#00b88b",
@@ -104,10 +107,42 @@ const ValidationTextField = styled(TextField)(({ isValid }) => ({
     },
     "&.Mui-focused fieldset": {
       borderColor: "#F9F01F",
+      borderWidth: 3,
     },
     "& input:valid + fieldset": {
       borderColor: isValid === true ? "#00b88b" : "#F9F01F",
       borderWidth: 3,
+    },
+  },
+}));
+const ValidationAutocomplete = styled(Autocomplete)(({ isValid }) => ({
+  "& label.Mui-focused": {
+    color: "#f9f9f9", //label focused
+  },
+  "& label": {
+    color: "#f9f9f9", //label unfocused
+  },
+  "& .MuiInput-underline:after": {
+    borderBottomColor: "#B2BAC2",
+  },
+  "& .MuiOutlinedInput-root": {
+    "& fieldset": {
+      borderColor: isValid === false ? "#eb8686" : isValid === true ? "#00b88b" : "#f9f01f",
+      borderWidth: isValid === false ? 2 : isValid === true ? 3 : 2,
+    },
+    "& input": {
+      color: "#f9f9f9", // Set the text color
+    },
+    "&:hover fieldset": {
+      borderColor: "#B2BAC2",
+    },
+    "&.Mui-focused fieldset": {
+      borderColor: "#F9F01F",
+      borderWidth: 3,
+    },
+    "& input:valid + fieldset": {
+      borderColor: "#00b88b",
+      borderColor: isValid === true ? "#00b88b" : "#F9F01F",
     },
   },
 }));
@@ -298,6 +333,9 @@ function ContactForm(props) {
   const [isLastNameValid, setIsLastNameValid] = useState(null);
   const [isEmailValid, setIsEmailValid] = useState(null);
   const [isPhoneValid, setIsPhoneValid] = useState(null);
+  const [dataSuggestion, setDataSuggestion] = useState([]);
+  const [address, setAddress] = useState("");
+  const [isAddressValid, setIsAddressValid] = useState(null);
   const [isZipCodeValid, setIsZipCodeValid] = useState(null);
 
   const handleChange = (event) => {
@@ -305,35 +343,6 @@ function ContactForm(props) {
       ...values,
       [event.target.name]: event.target.value,
     });
-  };
-
-  const validateInput = (name, value) => {
-    if (value.trim() === "") {
-      // Input field is empty
-      return false;
-    }
-
-    let hasNumbers = false;
-    for (let i = 0; i < value.length; i++) {
-      if (!isNaN(parseInt(value[i]))) {
-        hasNumbers = true;
-        break;
-      }
-    }
-    return !hasNumbers;
-  };
-  const handleFirstName = (event) => {
-    const { name, value } = event.target;
-    if (name === "firstName") {
-      setIsFirstNameValid(validateInput(name, value));
-    }
-  };
-
-  const handleLastName = (event) => {
-    const { name, value } = event.target;
-    if (name === "lastName") {
-      setIsLastNameValid(validateInput(name, value));
-    }
   };
 
   const handleEmail = (event) => {
@@ -365,6 +374,21 @@ function ContactForm(props) {
     // console.log(event.target.value.length);
   };
 
+  const handleAddress = async (event) => {
+    const { value } = event.target;
+
+    try {
+      const response = await fetch(`https://api.dataforsyningen.dk/autocomplete?q=${address}&caretpos=18&fuzzy=`); // Replace API_URL with the actual URL of your API
+      const data = await response.json();
+
+      const match = data.find((apiSuggestion) => apiSuggestion.forslagstekst.toLowerCase() === value.toLowerCase());
+      setIsAddressValid(!!match);
+      console.log(isAddressValid);
+    } catch (error) {
+      console.error("Error fetching data from API:", error);
+      setIsAddressValid(false);
+    }
+  };
   const inputValue = values.phoneNumber.length;
   const inputValueZip = zipCode.length;
 
@@ -487,52 +511,30 @@ function ContactForm(props) {
             isValid={isEmailValid}
           />
           {isEmailValid === false && <small className="font-sans">Email must contain at least an @ sign</small>}
-          <ValidationTextField
+
+          <ValidationAutocomplete
+            className={`mt-4 ${isAddressValid === false && "shake"}`}
             InputProps={{
               inputMode: "text",
-              endAdornment: (
-                <>
-                  {isEmailValid === true && <span class="material-symbols-outlined check">check_circle</span>}
-                  {isEmailValid === false && <span class="material-symbols-outlined wrong">error</span>}
-                </>
-              ),
             }}
+            onBlur={handleAddress}
+            freeSolo
             fullWidth
-            className="mt-4"
-            type="text"
-            label="Street and house number"
-            required
-            variant="outlined"
-            defaultValue=""
-            id="validation-outlined-input"
-            name="streetAdress"
+            getOptionLabel={(address) => address.label}
+            id="addressSearch"
+            inputValue={address}
+            onInputChange={(event, value) => setAddress(value)}
+            isValid={isAddressValid}
+            options={dataSuggestion}
+            renderInput={(params) => (
+              <TextField
+                {...params}
+                label="Address"
+              />
+            )}
+            name="addressField"
           />
-          <ValidationTextFieldZip
-            InputProps={{
-              inputMode: "decimal",
-              endAdornment: (
-                <>
-                  {isZipCodeValid === true && <span class="material-symbols-outlined check">check_circle</span>}
-                  {isZipCodeValid === false && <span class="material-symbols-outlined wrong">error</span>}
-                </>
-              ),
-            }}
-            onBlur={handleZipCode}
-            type="number"
-            fullWidth
-            className={`mt-4 ${isZipCodeValid === false && "shake"}`}
-            label="Zip code"
-            required
-            variant="outlined"
-            value={zipCode}
-            defaultValue=""
-            id="validation-outlined-input"
-            onChange={handleChangeZip}
-            inputValueZip={inputValueZip}
-            name="zipCode"
-            isValid={isZipCodeValid}
-          />
-          {isZipCodeValid === false && <small className="font-sans">Please enter a valid zipcode e.g: 2000</small>}
+          {isAddressValid === false && <small className="font-sans">Please enter a valid address!</small>}
         </AccordionDetails>
         <div className="mt-10 flex justify-center">
           <Button
