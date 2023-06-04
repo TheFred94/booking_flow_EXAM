@@ -23,11 +23,13 @@ import FormControl from "@mui/material/FormControl";
 import FormLabel from "@mui/material/FormLabel";
 import { PhonePayment } from "@/components/svgs";
 import { CardPayment } from "@/components/svgs";
+import { PaymentPhoneField } from "../components/PaymentPhoneField";
 
 export default function payment(props) {
   const [bookingDetails, setBookingDetails] = useContext(BookingInformation);
   const [currentAccordionIndex, setCurrentAccordionIndex] = useState(0);
   const [formArray, setFormArray] = useState([]);
+  const [selectedPaymentType, setSelectedPaymentType] = useState("");
   const router = useRouter();
 
   // styling for modal
@@ -198,21 +200,24 @@ export default function payment(props) {
           ))}
         </Stepper>
         <div className="mx-1 mt-8 max-w-full rounded-sm bg-gradient-to-b from-color-opacity-20 to-color-opacity-10 px-8 pt-8 md:mx-auto md:max-w-2xl">
-          <PaymentType />
-          <PaymentForm
-            bookingDetails={bookingDetails}
-            // updateBookingDetails={updateBookingDetails}
-            onNextTicket={handleNextTicket}
-            handleSubmit={handleSubmit}
-          />
-          <div className="  mt-10 flex justify-center">
-            <Button
-              className=" mb-10 h-10 gap-5 place-self-center rounded-none border-2 border-solid border-color-yellow px-6 font-sans font-semibold text-color-yellow hover:bg-color-yellow hover:text-color-black "
-              onClick={confirmTickets}
-            >
-              <span className="pt-1">Next step</span> <span className="material-symbols-outlined">arrow_forward</span>
-            </Button>
-          </div>
+          <PaymentType setSelectedPaymentType={setSelectedPaymentType} />
+          {selectedPaymentType === "phone" && <PaymentPhoneField />}
+          {selectedPaymentType === "card" && (
+            <PaymentForm
+              bookingDetails={bookingDetails}
+              // updateBookingDetails={updateBookingDetails}
+              onNextTicket={handleNextTicket}
+              handleSubmit={handleSubmit}
+            />
+          )}
+        </div>
+        <div className="  mt-10 flex justify-center">
+          <Button
+            className=" mb-10 h-10 gap-5 place-self-center rounded-none border-2 border-solid border-color-yellow px-6 font-sans font-semibold text-color-yellow hover:bg-color-yellow hover:text-color-black "
+            onClick={confirmTickets}
+          >
+            <span className="pt-1">Next step</span> <span className="material-symbols-outlined">arrow_forward</span>
+          </Button>
         </div>
 
         {/* ------------- logger button  ---------------- */}
@@ -233,7 +238,14 @@ export default function payment(props) {
   );
 }
 
-function PaymentType() {
+function PaymentType({ setSelectedPaymentType }) {
+  const [value, setValue] = useState("");
+
+  const handleRadioChange = (event) => {
+    setValue(event.target.value);
+    setSelectedPaymentType(event.target.value);
+  };
+
   return (
     <>
       <FormControl className="flex ">
@@ -246,8 +258,13 @@ function PaymentType() {
           aria-labelledby="demo-radio-buttons-group-label"
           defaultValue=""
           name="radio-buttons-group"
+          onChange={handleRadioChange}
         >
-          <div className="bg-color flex h-32 w-40 bg-gradient-to-b  from-color-opacity-20 to-color-opacity-10 pl-5 pt-3 ">
+          <div
+            className={`bg-color flex h-32 w-40 justify-between  bg-gradient-to-b from-color-opacity-20 to-color-opacity-10 pl-5 pt-3
+            ${value === "card" ? "bg-gradient-to-b from-color-teal to-color-purple" : ""}
+             `}
+          >
             <div>
               <CardPayment className="fill-color-yellow" />
               <h4 className="font-sans text-color-white">Credit card</h4>
@@ -278,7 +295,11 @@ function PaymentType() {
             />
           </div>
 
-          <div className="bg-color flex h-32 w-40  justify-between bg-gradient-to-b  from-color-opacity-20 to-color-opacity-10 pl-5 pt-3">
+          <div
+            className={`bg-color flex h-32 w-40 justify-between  bg-gradient-to-b from-color-opacity-20 to-color-opacity-10 pl-5 pt-3
+            ${value === "phone" ? "bg-gradient-to-b from-color-teal to-color-purple" : ""}
+             `}
+          >
             <div>
               <PhonePayment className="fill-color-yellow" />
               <h4 className="font-sans text-color-white">Phone</h4>
