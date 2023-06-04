@@ -16,6 +16,13 @@ import CountdownTimer from "./CountdownTimer";
 import Stepper from "@mui/material/Stepper";
 import Step from "@mui/material/Step";
 import StepLabel from "@mui/material/StepLabel";
+import Radio from "@mui/material/Radio";
+import RadioGroup from "@mui/material/RadioGroup";
+import FormControlLabel from "@mui/material/FormControlLabel";
+import FormControl from "@mui/material/FormControl";
+import FormLabel from "@mui/material/FormLabel";
+import { PhonePayment } from "@/components/svgs";
+import { CardPayment } from "@/components/svgs";
 
 export default function payment(props) {
   const [bookingDetails, setBookingDetails] = useContext(BookingInformation);
@@ -190,6 +197,7 @@ export default function payment(props) {
             </Step>
           ))}
         </Stepper>
+        <PaymentType />
         <div className="mx-1 mt-8 max-w-full rounded-sm bg-gradient-to-b from-color-opacity-20 to-color-opacity-10 px-8 pt-8 md:mx-auto md:max-w-2xl">
           <PaymentForm
             bookingDetails={bookingDetails}
@@ -221,6 +229,61 @@ export default function payment(props) {
           <PriceDrawer />
         </div>
       </main>
+    </>
+  );
+}
+
+function PaymentType() {
+  return (
+    <>
+      <FormControl>
+        <FormLabel id="demo-radio-buttons-group-label">
+          <h3>Payment type</h3>
+        </FormLabel>
+        <RadioGroup
+          aria-labelledby="demo-radio-buttons-group-label"
+          defaultValue=""
+          name="radio-buttons-group"
+        >
+          <div className="h-32 w-96 bg-color-opacity-10">
+            <FormControlLabel
+              sx={{
+                "& .MuiTypography-root": { color: "#f9f9f9" },
+              }}
+              className="h-10"
+              value="female"
+              control={
+                <Radio
+                  sx={{
+                    "& .MuiSvgIcon-root": {
+                      fontSize: 20,
+                      color: "#F9F01F",
+                      "&.Mui-checked": {
+                        color: "#F9F01F",
+                      },
+                      "&.MuiTouchRipple-root": {
+                        color: "#F9F01F",
+                      },
+                    },
+                  }}
+                />
+              }
+              label="Female"
+            />
+            <CardPayment />
+          </div>
+          <FormControlLabel
+            value="male"
+            control={<Radio />}
+            label="Male"
+          />
+          <FormControlLabel
+            value="other"
+            control={<Radio />}
+            label="Other"
+          />
+        </RadioGroup>
+      </FormControl>
     </>
   );
 }

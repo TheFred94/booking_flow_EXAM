@@ -161,6 +161,7 @@ export function AreaListItem(props) {
             name="area"
             value={initialArea}
             onChange={updateBookingInformation}
+            defaultValue=""
           >
             <FormControlLabel
               value={area.area}
