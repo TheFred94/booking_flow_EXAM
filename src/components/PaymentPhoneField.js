@@ -58,6 +58,7 @@ export function PaymentPhoneField() {
   const inputValue = values.phoneNumber.length;
   return (
     <>
+      <p>Enter your phonenumber and we'll send a payment request </p>
       <ValidationTextFieldPhone
         className={`mt-4 ${isPhoneValid === false && "shake"}`}
         onChange={handleChange}
@@ -83,8 +84,12 @@ export function PaymentPhoneField() {
         name="phoneNumber"
         isValid={isPhoneValid}
       />
-      {isPhoneValid === false && (
+      {isPhoneValid === false ? (
         <small className="font-sans">
+          Please enter a valid phone number e.g: <span className="font-sans font-thin">22 22 22 22</span>
+        </small>
+      ) : (
+        <small className="font-sans text-color-opacity-0">
           Please enter a valid phone number e.g: <span className="font-sans font-thin">22 22 22 22</span>
         </small>
       )}
