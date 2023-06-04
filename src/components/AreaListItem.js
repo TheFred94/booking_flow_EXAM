@@ -17,10 +17,8 @@ export function AreaListItem(props) {
   const area = props.area;
   // sets state of bookingDetails to our context(BookingInformation).
   const [bookingDetails, setBookingDetails] = useContext(BookingInformation);
-  const initialArea = bookingDetails.area || "";
   // state for modal
   const [open, setOpen] = useState(false);
-
   // state for reserved spots
   const [spotAmount, setSpotAmount] = useState(0);
 
@@ -66,12 +64,13 @@ export function AreaListItem(props) {
   }, [spotAmount, bookingDetails.ticketAmount]);
 
   // This function updates the bookingInformation, so that it  also contains the clicked area and amount of spots to reserve
-  function updateBookingInformation() {
+  function updateBookingInformation(event) {
+    const selectedArea = event ? event.target.value : "";
     // console.log(`updateBookingInformation called`);
     setBookingDetails((prev) => ({
       ...prev,
-      area: area.area,
-      spotAmount: spotAmount,
+      area: selectedArea,
+      spotAmount,
     }));
   }
 
@@ -157,11 +156,10 @@ export function AreaListItem(props) {
           <h3 className={` self-center text-lg duration-200 ${area.available === 0 ? "text-color-gray" : ""} ${areaAvailable() === "text-color-red" ? "text-color-gray" : ""}`}>{area.area}</h3>
           <RadioGroup
             className="self-center"
-            aria-label="area"
+            aria-labelledby="area"
             name="area"
-            value={initialArea}
-            onChange={updateBookingInformation}
-            defaultValue=""
+            value={bookingDetails.area || ""}
+            onChange={(event) => updateBookingInformation(event)}
           >
             <FormControlLabel
               value={area.area}
@@ -186,6 +184,8 @@ export function AreaListItem(props) {
                 />
               }
               disabled={areaAvailable() === "text-color-red" || area.available === 0}
+              // To prevent having to click the area twice to select it
+              onClick={(event) => event.stopPropagation()}
             ></FormControlLabel>
           </RadioGroup>
         </div>
