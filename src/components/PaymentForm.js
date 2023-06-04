@@ -130,7 +130,7 @@ export const TextMaskCustom = React.forwardRef(function TextMaskCustom(props, re
   return (
     <IMaskInput
       {...other}
-      mask="0000-0000-0000-0000"
+      mask="0000 0000 0000 0000"
       definitions={{
         "#": /[1-9]/,
       }}
@@ -306,8 +306,8 @@ export function PaymentForm(props) {
         name="cardNumber"
         isValid={isCardNumberValid}
       />
-      {isCardNumberValid === null ? <small>E.g 0000-0000-0000-0000</small> : isCardNumberValid === true ? <small className="text-color-opacity-0">True</small> : isCardNumberValid === false ? <small>Please enter a valid card number</small> : <small></small>}
-      <div className="flex flex-row">
+      {isCardNumberValid === null ? <small>E.g 1234 5678 9101 1121</small> : isCardNumberValid === true ? <small className="text-color-opacity-0">True</small> : isCardNumberValid === false ? <small>Please enter a valid card number</small> : <small></small>}
+      <div className="flex flex-row justify-between sm:justify-start md:justify-start">
         <div className="flex flex-col gap-2">
           <ValidationTextFieldMonthYear
             InputProps={{
@@ -332,7 +332,7 @@ export function PaymentForm(props) {
             name="monthYear"
             isValid={isMonthYearValid}
           />
-          {isMonthYearValid === null ? <small>E.g 00/00</small> : isMonthYearValid === true ? <small className="text-color-opacity-0">True</small> : isMonthYearValid === false ? <small>Please enter a valid month and date e.g 12/23</small> : <small></small>}
+          {isMonthYearValid === null ? <small>E.g 12/24</small> : isMonthYearValid === true ? <small className="text-color-opacity-0">True</small> : isMonthYearValid === false ? <small>Please enter a valid month and date e.g 12/23</small> : <small></small>}
         </div>
         <div className="ml-4 flex flex-col gap-2">
           <ValidationTextFieldCvc
@@ -358,7 +358,7 @@ export function PaymentForm(props) {
             name="cvc"
             isValid={isCvcValid}
           />
-          {isCvcValid === null ? <small>E.g 000</small> : isCvcValid === true ? <small className="text-color-opacity-0">True</small> : isCvcValid === false ? <small>Please enter a valid number E.g 123</small> : <small></small>}
+          {isCvcValid === null ? <small>E.g 123</small> : isCvcValid === true ? <small className="text-color-opacity-0">True</small> : isCvcValid === false ? <small>Please enter a valid number E.g 123</small> : <small></small>}
         </div>
       </div>
 
