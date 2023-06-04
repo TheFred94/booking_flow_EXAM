@@ -72,6 +72,7 @@ export function AreaListItem(props) {
       area: selectedArea,
       spotAmount,
     }));
+    console.log(area.area);
   }
 
   // This function helps to indicate whether an area is available based on the amount of tickets you have chosen.
