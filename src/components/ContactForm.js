@@ -150,7 +150,7 @@ export function ContactForm(props) {
             name="firstName"
             isValid={isFirstNameValid}
           />
-          {isFirstNameValid === false && <small className="font-sans">Please enter a valid firstname</small>}
+          {isFirstNameValid === false ? <small className="font-sans">Please enter a valid firstname</small> : <small className="font-sans text-color-opacity-0">Please enter a valid firstname</small>}
           <ValidationTextField
             InputProps={{
               inputMode: "text",
@@ -173,7 +173,7 @@ export function ContactForm(props) {
             name="lastName"
             isValid={isLastNameValid}
           />
-          {isLastNameValid === false && <small className="font-sans">Please enter a valid lastname</small>}
+          {isLastNameValid === false ? <small className="font-sans">Please enter a valid lastname</small> : <small className="font-sans text-color-opacity-0">Please enter a valid firstname</small>}
           <ValidationTextFieldPhone
             className={`mt-4 ${isPhoneValid === false && "shake"}`}
             onChange={handleChange}
@@ -199,10 +199,12 @@ export function ContactForm(props) {
             name="phoneNumber"
             isValid={isPhoneValid}
           />
-          {isPhoneValid === false && (
+          {isPhoneValid === false ? (
             <small className="font-sans">
               Please enter a valid phone number e.g: <span className="font-sans font-thin">22 22 22 22</span>
             </small>
+          ) : (
+            <small className="font-sans text-color-opacity-0">Please enter a valid firstname</small>
           )}
           {isPhoneValid === false && ""}
           <ValidationTextField
@@ -228,7 +230,7 @@ export function ContactForm(props) {
             name="email"
             isValid={isEmailValid}
           />
-          {isEmailValid === false && <small className="font-sans">Email must contain at least an @ sign</small>}
+          {isEmailValid === false ? <small className="font-sans">Email must contain at least an @ sign</small> : <small className="font-sans text-color-opacity-0">Please enter a valid firstname</small>}
 
           <ValidationAutocomplete
             className={`mt-4 ${isAddressValid === false && "shake"}`}
@@ -252,7 +254,7 @@ export function ContactForm(props) {
               />
             )}
           />
-          {isAddressValid === false && <small className="font-sans">Please enter a valid address!</small>}
+          {isAddressValid === false ? <small className="font-sans">Please enter a valid address!</small> : <small className="font-sans text-color-opacity-0">Please enter a valid firstname</small>}
         </AccordionDetails>
         <div className="mt-10 flex justify-center">
           <Button
