@@ -236,53 +236,78 @@ export default function payment(props) {
 function PaymentType() {
   return (
     <>
-      <FormControl>
+      <FormControl className="flex ">
         <FormLabel id="demo-radio-buttons-group-label">
           <h3>Payment type</h3>
         </FormLabel>
-        <RadioGroup
-          aria-labelledby="demo-radio-buttons-group-label"
-          defaultValue=""
-          name="radio-buttons-group"
-        >
-          <div className="h-32 w-96 bg-color-opacity-10">
-            <FormControlLabel
-              sx={{
-                "& .MuiTypography-root": { color: "#f9f9f9" },
-              }}
-              className="h-10"
-              value="female"
-              control={
-                <Radio
-                  sx={{
-                    "& .MuiSvgIcon-root": {
-                      fontSize: 20,
-                      color: "#F9F01F",
-                      "&.Mui-checked": {
+        <div className="flex">
+          <RadioGroup
+            aria-labelledby="demo-radio-buttons-group-label"
+            defaultValue=""
+            name="radio-buttons-group"
+          >
+            <div className="bg-color flex h-32 w-48  justify-between bg-gradient-to-b  from-color-opacity-20 to-color-opacity-10 pl-5 pt-3">
+              <div>
+                <CardPayment className="fill-color-yellow" />
+                <h4 className="font-sans text-color-white">Credit card</h4>
+              </div>
+              <FormControlLabel
+                sx={{
+                  "& .MuiTypography-root": { color: "#f9f9f9" },
+                }}
+                className="h-10"
+                value="card"
+                control={
+                  <Radio
+                    sx={{
+                      "& .MuiSvgIcon-root": {
+                        fontSize: 20,
                         color: "#F9F01F",
+                        "&.Mui-checked": {
+                          color: "#F9F01F",
+                        },
+                        "&.MuiTouchRipple-root": {
+                          color: "#F9F01F",
+                        },
                       },
-                      "&.MuiTouchRipple-root": {
+                    }}
+                  />
+                }
+                label=""
+              />
+            </div>
+            <div className="bg-color flex h-32 w-48  justify-between bg-gradient-to-b  from-color-opacity-20 to-color-opacity-10 pl-5 pt-3">
+              <div>
+                <PhonePayment className="fill-color-yellow" />
+                <h4 className="font-sans text-color-white">Phone</h4>
+              </div>
+              <FormControlLabel
+                sx={{
+                  "& .MuiTypography-root": { color: "#f9f9f9" },
+                }}
+                className="h-10"
+                value="phone"
+                control={
+                  <Radio
+                    sx={{
+                      "& .MuiSvgIcon-root": {
+                        fontSize: 20,
                         color: "#F9F01F",
+                        "&.Mui-checked": {
+                          color: "#F9F01F",
+                        },
+                        "&.MuiTouchRipple-root": {
+                          color: "#F9F01F",
+                        },
                       },
-                    },
-                  }}
-                />
-              }
-              label="Female"
-            />
-            <CardPayment />
-          </div>
-          <FormControlLabel
-            value="male"
-            control={<Radio />}
-            label="Male"
-          />
-          <FormControlLabel
-            value="other"
-            control={<Radio />}
-            label="Other"
-          />
-        </RadioGroup>
+                    }}
+                  />
+                }
+                label=""
+              />
+            </div>
+          </RadioGroup>
+        </div>
       </FormControl>
     </>
   );
