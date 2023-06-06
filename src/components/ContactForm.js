@@ -101,6 +101,7 @@ export function ContactForm(props) {
       const data = await response.json();
 
       const match = data.find((apiSuggestion) => apiSuggestion.forslagstekst.toLowerCase() === value.toLowerCase());
+      // !!match is used to convert the match variable into a boolean value. #1 ! = converts into boolean value and reverts truthiness #2 ! = negates boolean from previous step. If falsy double negation returns false if truthy = returns true
       setIsAddressValid(!!match);
       console.log(isAddressValid);
     } catch (error) {

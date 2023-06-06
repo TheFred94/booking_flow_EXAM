@@ -23,14 +23,14 @@ export function PaymentType({ setSelectedPaymentType }) {
         </FormLabel>
 
         <RadioGroup
-          className=" mb-10 flex w-auto flex-row justify-center gap-12"
+          className="mb-10 flex flex-row justify-center gap-12 sm:justify-center md:justify-center lg:justify-center"
           aria-labelledby="demo-radio-buttons-group-label"
           defaultValue=""
           name="radio-buttons-group"
           onChange={handleRadioChange}
         >
           <div
-            className={`bg-color flex h-32 w-40 justify-between  bg-gradient-to-b from-color-opacity-20 to-color-opacity-10 pl-5 pt-3
+            className={`bg-color flex h-32 w-24 justify-between bg-gradient-to-b  from-color-opacity-20 to-color-opacity-10 pl-5 pt-3 sm:w-40 
             ${value === "card" ? "bg-gradient-to-b from-color-teal to-color-purple" : ""}
              `}
           >
@@ -65,7 +65,7 @@ export function PaymentType({ setSelectedPaymentType }) {
           </div>
 
           <div
-            className={`bg-color flex h-32 w-40 justify-between  bg-gradient-to-b from-color-opacity-20 to-color-opacity-10 pl-5 pt-3
+            className={`bg-color w-26 flex h-32 justify-between  bg-gradient-to-b from-color-opacity-20 to-color-opacity-10 pl-5 pt-3 sm:w-40
             ${value === "phone" ? "bg-gradient-to-b from-color-teal to-color-purple" : ""}
              `}
           >
