@@ -18,6 +18,9 @@ import Step from "@mui/material/Step";
 import StepLabel from "@mui/material/StepLabel";
 import { PaymentPhoneField } from "../components/PaymentPhoneField";
 import { PaymentType } from "../components/PaymentType";
+import FormGroup from "@mui/material/FormGroup";
+import FormControlLabel from "@mui/material/FormControlLabel";
+import { Checkbox } from "@mui/material";
 
 export default function payment(props) {
   const [bookingDetails, setBookingDetails] = useContext(BookingInformation);
@@ -25,6 +28,23 @@ export default function payment(props) {
   const [formArray, setFormArray] = useState([]);
   const [selectedPaymentType, setSelectedPaymentType] = useState("");
   const router = useRouter();
+
+  const [isChecked, setIsChecked] = useState(false);
+
+  function changeIsChecked() {
+    isChecked ? setIsChecked(false) : setIsChecked(true);
+  }
+
+  function updateBookingDetails() {
+    setBookingDetails((prev) => ({
+      ...prev,
+      termsAndConditions: isChecked,
+    }));
+  }
+
+  useEffect(() => {
+    updateBookingDetails();
+  }, [isChecked]);
 
   // styling for modal
   const style = {
@@ -206,13 +226,52 @@ export default function payment(props) {
             />
           )}
         </div>
+        <FormGroup className="flex items-center">
+          <FormControlLabel
+            control={
+              <Checkbox
+                onChange={changeIsChecked}
+                checked={isChecked}
+                sx={{
+                  "& .MuiSvgIcon-root": {
+                    color: "yellow",
+                    "&.Mui-checked": {
+                      color: "yellow",
+                    },
+                    ".MuiTouchRippe-root": {
+                      color: "yellow",
+                    },
+                    "&.MuiCheckbox-root": {
+                      fontFamily: "var(--font-josefin)",
+                    },
+                  },
+                }}
+              />
+            }
+            label={
+              <Typography style={{ fontFamily: "var(--font-josefin" }}>
+                I agree to the <strong className="text-color-yellow"> terms and conditions</strong>
+              </Typography>
+            }
+            className="flex items-center pt-5 font-sans text-color-white"
+          />
+        </FormGroup>
         <div className="  mt-10 flex justify-center">
-          <Button
-            className=" mb-10 h-10 gap-5 place-self-center rounded-none border-2 border-solid border-color-yellow px-6 font-sans font-semibold text-color-yellow hover:bg-color-yellow hover:text-color-black "
-            onClick={confirmTickets}
-          >
-            <span className="pt-1">Next step</span> <span className="material-symbols-outlined">arrow_forward</span>
-          </Button>
+          {isChecked === false ? (
+            <Button
+              disabled={true}
+              className=" mb-10 h-10 gap-5 place-self-center rounded-none border-2 border-solid border-color-gray bg-color-gray px-6 font-sans font-semibold text-color-black hover:bg-color-yellow hover:text-color-black "
+            >
+              <span className="pt-1">Finalize booking</span> <span className="material-symbols-outlined">arrow_forward</span>
+            </Button>
+          ) : (
+            <Button
+              className=" mb-10 h-10 gap-5 place-self-center rounded-none border-2 border-solid border-color-yellow px-6 font-sans font-semibold text-color-yellow hover:bg-color-yellow hover:text-color-black"
+              onClick={confirmTickets}
+            >
+              <span className="pt-1">Finalize booking</span> <span className="material-symbols-outlined">arrow_forward</span>
+            </Button>
+          )}
         </div>
 
         {/* ------------- logger button  ---------------- */}
