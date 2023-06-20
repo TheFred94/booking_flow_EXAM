@@ -1,5 +1,6 @@
 import { Button } from "@mui/material";
 import { useRouter } from "next/router";
+import "material-symbols";
 
 export default function thankYou() {
   const router = useRouter();

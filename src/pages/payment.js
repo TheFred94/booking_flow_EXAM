@@ -71,6 +71,7 @@ export default function payment(props) {
 
   function sendToSupabase() {
     console.log(`send to supabase activatet`);
+    console.log(bookingDetails);
 
     // const payload = {
     //   area: "Nilfheim",
