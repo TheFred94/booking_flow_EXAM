@@ -162,6 +162,7 @@ function Contact(props) {
     console.log(formArray);
   };
 
+  // Update function: Creates a copy of the existing formArray using spread operator. Then replaces the object at the current index with the new formData. Then sets the updatedFormArray as the new value of the formArray.
   const handleSubmit = (event, address) => {
     event.preventDefault();
     const formData = {
@@ -172,8 +173,14 @@ function Contact(props) {
       streetAdress: event.target.addressField.value,
     };
 
-    setFormArray((prevFormArray) => [...prevFormArray, formData]);
+    setFormArray((prevFormArray) => {
+      const updatedFormArray = [...prevFormArray];
+      updatedFormArray[currentAccordionIndex] = formData;
+      return updatedFormArray;
+    });
+
     handleNextTicket();
+
     console.log("Form Data:", JSON.stringify(formData));
     console.log(formData); // Log the stringified form data
     console.log(formArray.length);
