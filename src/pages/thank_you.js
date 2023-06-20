@@ -1,13 +1,9 @@
 import { Button } from "@mui/material";
 import { useRouter } from "next/router";
-import { MaterialSymbol } from "material-symbols";
-import Stepper from "@mui/material/Stepper";
-import Step from "@mui/material/Step";
-import StepLabel from "@mui/material/StepLabel";
 
 export default function thankYou() {
   const router = useRouter();
-  const steps = ["Amount", "Type", "Setup", "Information", "Payment"];
+
   return (
     <>
       <main className="mx-1 mt-8 max-w-full rounded-sm bg-gradient-to-b from-color-opacity-20 to-color-opacity-10 px-8 pt-8 md:mx-auto md:max-w-2xl">
